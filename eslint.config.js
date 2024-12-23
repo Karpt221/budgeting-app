@@ -1,32 +1,36 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from '@eslint/js';
+import globals from 'globals';
+import babelParser from '@babel/eslint-parser';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
-  { ignores: ['dist'] },
+  {
+    ignores: ['dist'],
+  },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: {  
-        ...globals.browser,  
+      globals: {
+        ...globals.browser,
         ...globals.node,
       },
+      parser: babelParser,
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
+        requireConfigFile: false,
+        babelOptions: {
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+        },
       },
     },
-    parser: '@babel/eslint-parser',
-    parserOptions: {  
-      ecmaVersion: 12,
-      sourceType: 'module',  
-      ecmaFeatures: { jsx: true },  
-    }, 
-    settings: { react: { version: '18.3' } },
+    settings: {
+      react: { version: '18.3' },
+    },
     plugins: {
       react,
       'react-hooks': reactHooks,
@@ -41,7 +45,7 @@ export default [
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
-      ],
+      ], // Custom rule for react-refresh
     },
   },
-]
+];

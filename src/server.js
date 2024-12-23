@@ -1,44 +1,32 @@
-import { join } from 'path';  
-import { fileURLToPath } from 'url';  
-import express from 'express';  
-import router from './lib/router.js';  
-import dotenv from 'dotenv'; 
+import dotenv from 'dotenv';
+dotenv.config();
+import { join } from 'path';
+import { fileURLToPath } from 'url';
+import express from 'express';
+import mainRouter from './lib/routers/main.js';
 
-dotenv.config();  
-const { PORT = 3001 } = process.env;  
+const PORT = process.env.PORT || 3001;
 
-// Get the `__dirname` equivalent in ES modules  
-const __filename = fileURLToPath(import.meta.url);  
-const __dirname = join(__filename, '..');  
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = join(__filename, '..');
 
-const app = express();  
+const app = express();
 
-// Middleware that parses JSON and looks at requests where the Content-Type header matches the type option  
-app.use(express.json());  
+app.use(express.json());
 
-// Serve API requests from the router  
-app.use('/api', router);  
+app.use('/api', mainRouter);
 
-// Serve app production bundle  
-app.use(express.static('dist/app'));  
+app.use(express.static('dist/app'));
 
-// Handle client routing, return all requests to the app  
-app.get('*', (_req, res) => {  
-  res.sendFile(join(__dirname, 'dist/app/index.html'));  
-});  
-
-const server = app.listen(PORT, () => {  
-  console.log(`Server listening at http://localhost:${PORT}`);  
+app.get('*', (_req, res) => {
+  res.sendFile(join(__dirname, '/app/index.html'));
 });
 
-// Handle termination signals to clean up the process  
-const shutdown = () => {  
-  console.log('Shutting down server...');  
-  server.close(() => {  
-    console.log('Server closed');  
-    process.exit(0);  
-  });  
-};  
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal server error' });
+});
 
-process.on('SIGINT', shutdown); // Handle Ctrl+C or terminal close  
-process.on('SIGTERM', shutdown); // Handle termination signals  
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
