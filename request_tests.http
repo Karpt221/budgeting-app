@@ -1,0 +1,123 @@
+# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups HTTP/1.1
+
+# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups HTTP/1.1  
+# Content-Type: application/json  
+
+# {  
+#     "name": "Health & Fitness"  
+# }
+
+# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/37d24069-bb4f-430b-9fc0-5f4e06af77a6 HTTP/1.1  
+# Content-Type: application/json  
+
+# {  
+#     "name": "Updated Group Name"  
+# }
+
+
+# DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9 HTTP/1.1
+
+#GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories HTTP/1.1
+
+# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9/categories HTTP/1.1  
+# Content-Type: application/json  
+
+# {  
+#     "name": "Groceries"
+# }
+
+# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9/categories/d05b49c1-c8f1-4f75-a3b8-b677f83cd426 HTTP/1.1  
+# Content-Type: application/json  
+
+# {  
+#     "name": "Updated Category Name",  
+#     "assigned": 60000  
+# }
+
+# DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9/categories/d0a55fc5-6732-49f3-940c-23b0a5c53fc3 HTTP/1.1
+
+# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1
+
+# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1  
+# Content-Type: application/json  
+
+# {  
+#     "targetType": "monthly",  
+#     "need": 40000,  
+#     "targetDate": "15",  
+#     "nextGoal": "refill up to"  
+# }
+
+#DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1
+
+# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1  
+# Content-Type: application/json  
+
+# {  
+#     "targetType": "monthly",  
+#     "need": 30000,  
+#     "targetDate": "last day",  
+#     "nextGoal": "set aside another"  
+# }
+######################################################################################################################
+
+
+# POST http://localhost:3001/api/auth/sign-in HTTP/1.1
+# content-type: application/json
+
+# {
+#     "email": "user2@mail.com",
+#     "password": "1234"
+# }
+
+# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/ HTTP/1.1
+
+# DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/d2468217-ac0a-4487-8a11-5de6644c275e HTTP/1.1
+
+# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/3e488504-31fd-466a-85f5-33cdbf8fea3e HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "Changed Name",
+#     "balance": "55555"
+# }
+
+# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/ HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "New acc",
+#     "balance": "999"
+# }
+
+
+# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/3e488504-31fd-466a-85f5-33cdbf8fea3e HTTP/1.1
+
+# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/ HTTP/1.1
+
+# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/3e488504-31fd-466a-85f5-33cdbf8fea3e HTTP/1.1
+# content-type: application/json
+
+# {
+#     "date": "2010-12-20",
+#     "payee": "SHOP",
+#     "category": "SHOP",
+#     "memo": "fsrg",
+#     "amount": "999",
+#     "cleared": "true"
+# }
+
+# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/b379526d-c8f5-4463-8296-1301a0ba2c0e HTTP/1.1
+# content-type: application/json
+
+# {
+#     "date": "2025-12-20",
+#     "payee": "PJKK",
+#     "category": "PJKK",
+#     "memo": "fsrg",
+#     "amount": "55533",
+#     "cleared": "true"
+# }
+
+
+# DELETE  http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/b379526d-c8f5-4463-8296-1301a0ba2c0e HTTP/1.1

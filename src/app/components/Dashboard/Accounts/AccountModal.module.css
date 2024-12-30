@@ -1,0 +1,107 @@
+/* EditAccountModal.module.css */  
+.modalBackdrop {  
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    right: 0;  
+    bottom: 0;  
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent backdrop */  
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    z-index: 1000; /* Ensure it appears above other content */  
+  }  
+  
+  .modalContainer {  
+    background-color: white;  
+    color: rgb(60, 60, 60);
+    border-radius: 8px;  
+    padding: 20px;  
+    width: 600px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);  
+  }  
+  
+  .modalHeader {  
+    display: flex;  
+    justify-content: space-between;  
+    align-items: center;  
+    & h2{
+      margin: 0;
+    }
+  }  
+  
+  .closeButton {  
+    background: none;  
+    border: none;  
+    font-size: 24px;  
+    cursor: pointer;  
+  }  
+
+  .closeIcon{
+    color: black;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .modalBody p{  
+    font-size: larger;
+  }  
+  
+  .inputGroup {  
+    margin-bottom: 15px; 
+    display: flex;
+    flex-direction: column; 
+  }  
+  
+  .inputGroup label {  
+    display: block;  
+    margin-bottom: 5px;  
+  }  
+  
+  .inputGroup input{  
+    padding: 10px;  
+    color: black;
+    border: 1px solid #ccc;  
+    border-radius: 4px;  
+    background-color: transparent;
+    font-size: 25px;
+  }  
+  
+  .modalFooter {  
+    display: flex;  
+    justify-content: space-between;  
+    margin-top: 50px;  
+  }  
+  .modalFooter button {  
+    border-radius: 8px;  
+    border: none;  
+    padding: 10px 15px;  
+    cursor: pointer;  
+  }  
+  
+  .closeAccountButton {  
+    background-color: #fadedc; /* Red */  
+    color: rgb(249, 0, 0);   
+  }  
+  .closeAccountButton:hover {  
+    background-color: #fa3022; /* Red */  
+    color: rgb(255, 253, 253);   
+  }  
+  
+  .cancelButton {  
+    background-color: #d3d8f8;   
+    color: #3f51b5;   
+  }  
+
+  .cancelButton:hover{
+    background-color: #b7c0fa;   
+  }
+  
+  .saveButton {  
+    background-color: #3f51b5; /* Blue */  
+    color: white;  
+  }
+  .saveButton:hover{
+    background-color: #2e3b85; 
+  }
+  

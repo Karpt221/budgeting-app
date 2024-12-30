@@ -17,7 +17,6 @@ router.get(
     const { user_id } = req.params;
     const accounts = await getAccountsByUserId(user_id);
     res.json({
-      message: 'getAccountsByUserId',
       accounts: accounts,
     });
   },
@@ -30,10 +29,9 @@ router.post(
     try {
       const { name, balance } = req.body;
       const { user_id } = req.params;
-      await createBankingAccount(user_id, name, balance);
+      const account = await createBankingAccount(user_id, name, balance);
       res.status(201).json({
-        status: 201,
-        message: 'Banking account was created successfully!',
+        account,
       });
     } catch (err) {
       next(err);
@@ -49,7 +47,6 @@ router.delete(
       const { account_id } = req.params;
       const deletedAccount = await deleteBankingAccountById(account_id);
       res.status(200).json({
-        status: 200,
         message: 'Banking account was deleted successfully!',
         deletedAccount,
       });
@@ -65,14 +62,9 @@ router.put(
   async (req, res, next) => {
     try {
       const { account_id } = req.params;
-      const { name, balance } = req.body;
-      const updatedAccount = await updateBankingAccountById(
-        account_id,
-        name,
-        balance,
-      );
+      const { name } = req.body;
+      const updatedAccount = await updateBankingAccountById(account_id, name);
       res.status(200).json({
-        status: 200,
         message: 'Banking account was updated successfully!',
         updatedAccount,
       });

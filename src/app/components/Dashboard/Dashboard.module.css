@@ -1,0 +1,36 @@
+.dashboardContainer {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  height: 100vh;
+
+  & .sidebarContainer {
+    color: white;
+    background-color: rgb(75, 80, 131);
+    padding: 10px;
+    
+    & .mainNav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      & .sidebarNavItem {
+        background-color: transparent;
+        width: 100%;
+        text-align: start;
+        margin: 5px 0;
+        & a {
+          font-weight: 300;
+          padding: 5px 10px;
+          color: white;
+          display: block;
+          cursor: pointer;
+        }
+      }
+      & .sidebarNavItem:hover {
+        background-color: rgb(94, 94, 216);
+        border-radius: 5px;
+      }
+    }
+
+  }
+}
+

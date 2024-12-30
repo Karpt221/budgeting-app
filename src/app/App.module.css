@@ -1,0 +1,10 @@
+.authBackground {  
+  background-image: url('./assets/authBack.jpg');
+  background-size: cover;  
+  background-position: center;  
+}
+
+.authPlacement{
+  display: flex; 
+  place-items: center;
+}

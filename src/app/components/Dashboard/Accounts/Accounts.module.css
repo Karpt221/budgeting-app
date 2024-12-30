@@ -1,0 +1,53 @@
+.addAccountNav {
+  display: flex;
+  font-weight: 300;
+  & img {
+    width: 20px;
+  }
+  & button {
+    font-weight: 300;
+    padding: 5px 10px;
+    margin: 10px;
+    background-color: rgb(130, 127, 155);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  & button:hover{
+    background-color: rgb(153, 150, 182);
+  }
+}
+
+.account:hover {
+  background-color: rgb(94, 94, 216);
+  border-radius: 5px;
+
+  & img:hover {
+    background-color: rgb(50, 50, 98);
+    border-radius: 5px;
+  }
+}
+
+.navAccountsBtn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  font-weight: 300;
+  & button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 300;
+    background-color: transparent;
+  }
+  & img {
+    width: 30px;
+  }
+}
+
+.invisible {
+  visibility: hidden;
+}

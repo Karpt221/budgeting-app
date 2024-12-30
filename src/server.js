@@ -3,7 +3,7 @@ dotenv.config();
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
-import mainRouter from './lib/routers/main.js';
+import mainRouter from './lib/routers/mainRouter.js';
 
 const PORT = process.env.PORT || 3001;
 
@@ -23,8 +23,8 @@ app.get('*', (_req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Internal server error' });
+  console.error(err);
+  res.status(500).json({error:err , message: 'Internal server error' });
 });
 
 app.listen(PORT, () => {

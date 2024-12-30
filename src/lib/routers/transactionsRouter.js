@@ -5,7 +5,7 @@ import {
   getTransactionsByUserId,
   getTransactionsByAccountId,
   createTransaction,
-  deleteTransactionById,
+  deleteTransactionsByIds,
   updateTransactionById,
 } from '../db/transactionQueries.js';
 
@@ -42,10 +42,12 @@ router.post(
   async (req, res, next) => {
     try {
       const { account_id } = req.params;
-      const { date, payee, category, memo, amount, cleared } = req.body;
+      const { date, payee, category, memo, amount } = req.body;
 
-      if (!date || !payee || !category || !amount || cleared === undefined) {
-        return res.status(400).json({ message: 'Missing required fields' });
+      if (!date || !payee || !category || !amount) {
+        return res
+          .status(400)
+          .json({ code: 400, message: 'Missing required fields' });
       }
 
       const newTransaction = await createTransaction({
@@ -55,11 +57,9 @@ router.post(
         category,
         memo,
         amount,
-        cleared,
       });
 
       res.status(201).json({
-        status: 201,
         message: 'Transaction was added successfully!',
         transaction: newTransaction,
       });
@@ -70,18 +70,22 @@ router.post(
 );
 
 router.delete(
-  '/:transaction_id',
+  '/',
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
-      const { transaction_id } = req.params;
-
-      const deletedTransaction = await deleteTransactionById(transaction_id);
-
+      // const { transaction_ids } = req.params;
+      const { transaction_ids } = req.body;
+      console.log(transaction_ids);
+      if (!Array.isArray(transaction_ids) || transaction_ids.length === 0) {
+        return res.status(400).json({
+          message: 'Invalid request: transaction_ids must be a non-empty array.',
+        });
+      }
+      const deletedTransactions = await deleteTransactionsByIds(transaction_ids);
       res.status(200).json({
-        status: 200,
-        message: 'Transaction was deleted successfully!',
-        transaction: deletedTransaction,
+        message: 'Transactions was deleted successfully!',
+        transactions: deletedTransactions,
       });
     } catch (err) {
       next(err);
@@ -96,14 +100,13 @@ router.put(
     try {
       const { transaction_id } = req.params;
       const updates = req.body;
-
+      console.log('put endpoint:',transaction_id);
       const updatedTransaction = await updateTransactionById(
         transaction_id,
         updates,
       );
 
       res.status(200).json({
-        status: 200,
         message: 'Transaction was updated successfully!',
         transaction: updatedTransaction,
       });
