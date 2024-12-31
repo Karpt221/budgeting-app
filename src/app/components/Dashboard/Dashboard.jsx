@@ -34,7 +34,7 @@ const Dashboard = () => {
       </nav>
 
       <main className={styles.mainContainer}>
-        <Outlet  context={{ accounts: userData.accounts }} />
+        <Outlet  context={{categories: userData.categories, accounts: userData.accounts }} />
       </main>
     </div>
   );

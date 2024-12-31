@@ -8,8 +8,12 @@ const TransactionForm = ({
   accounts,
   onCancel,
   currentAccount,
-  transaction
+  transaction,
+  categories
 }) => {
+
+  console.log(categories);
+
   return (
     <>
       <tr className={styles.addRow}>
@@ -21,7 +25,6 @@ const TransactionForm = ({
               value={transaction.transaction_id}
             />
           )}
-
           <input readOnly type="checkbox" name="select" checked={true} />
         </td>
         {currentAccount ? null : (
@@ -64,14 +67,29 @@ const TransactionForm = ({
           />
         </td>
         <td>
-          <input  
+        <select
+              name="category"
+              id="category"
+              required
+              defaultValue={transaction?.category || ''} 
+            >
+              {categories.map((category) => (
+                <option
+                  key={category.category_id}
+                  value={category.category_id}
+                >
+                  {category.category_name}
+                </option>
+              ))}
+            </select>
+          {/* <input  
             type="text"  
             name="category"  
             id="category"  
             placeholder="category"  
             required  
             defaultValue={transaction?.category || ''}  
-          />  
+          />   */}
         </td>
         <td>
           <input

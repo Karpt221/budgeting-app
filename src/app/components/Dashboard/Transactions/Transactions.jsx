@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import TransactionForm from './TransactionForm'; // Import the new form component
 
 function Transactions() {
-  const { accounts } = useOutletContext();
+  const { accounts, categories } = useOutletContext();
   const transactionsData = useLoaderData();
   const [currentAccount, setCurrentAccount] = useState(null);
   const [selectedTransactions, setSelectedTransactions] = useState([]);
@@ -129,6 +129,7 @@ function Transactions() {
             {isAddTransactionFormOpen && (
               <TransactionForm
                 action="create"
+                categories={categories}
                 accounts={accounts}
                 onCancel={() => setIsAddTransactionFormOpen(false)}
                 currentAccount={currentAccount}
@@ -141,6 +142,7 @@ function Transactions() {
                 <TransactionForm
                   key={transaction.transaction_id}
                   action="edit"
+                  categories={categories}
                   accounts={accounts}
                   onCancel={() => setEditingTransaction(null)}
                   currentAccount={currentAccount}

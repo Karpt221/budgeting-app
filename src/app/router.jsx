@@ -77,10 +77,12 @@ const router = createBrowserRouter([
           try {
             const userAccounts = await apiService.getAccounts(params.user_id);
             const user = await apiService.getUserByID(params.user_id);
+            const categoriesResponse = await apiService.getCategorie(params.user_id);
             return {
               email: user.email,
               user_id: user.user_id,
               accounts: userAccounts.accounts,
+              categories:categoriesResponse.categories,
             };
           } catch (error) {
             if (error.code === 403) {

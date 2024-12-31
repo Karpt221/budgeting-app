@@ -6,7 +6,7 @@ export const getCategories = async () => {
       `  
         SELECT *   
         FROM categories   
-        ORDER BY created_at DESC   
+        ORDER BY created_at ASC   
         `,
       [],
     );
