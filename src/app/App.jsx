@@ -13,7 +13,7 @@ function App() {
       };  
   }, [location.pathname]);  
 
-  return <Outlet/>
+  return <Outlet/>;
 }
 
 export default App;

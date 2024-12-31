@@ -1,5 +1,4 @@
 import apiService from './ApiService.js';
-import { redirect } from 'react-router-dom';
 
 export async function handleEditAccount(formData) {
   const accountId = formData.get('account_id');
@@ -17,7 +16,7 @@ export async function handleCreateAccount(formData) {
   const name = formData.get('name');
   const balance = formData.get('balance');
   const createResponse = await apiService.createAccount(userId, name, balance);
-  return `/dashboard/transactions/${createResponse.account.account_id}`;
+  return `/${userId}/dashboard/transactions/${createResponse.account.account_id}`;
 }
 
 export async function handleEditTransaction(formData, account_id = null) {
@@ -29,10 +28,10 @@ export async function handleEditTransaction(formData, account_id = null) {
     finalAccount_id = formAccount_id;
   }
   const transactionId = formData.get('transaction_id');
-  console.log('handleEditTransaction:',transactionId);
+  console.log('handleEditTransaction:', transactionId);
   const updates = {
     account_id: finalAccount_id,
-    date: formData.get('date'),
+    transaction_date: formData.get('transaction_date'),
     payee: formData.get('payee'),
     category: formData.get('category'),
     memo: formData.get('memo'),
@@ -56,15 +55,12 @@ export async function handleCreateTransaction(formData, account_id = null) {
   }
 
   const transactionData = {
-    date: formData.get('date'),
+    transaction_date: formData.get('transaction_date'),
     payee: formData.get('payee'),
     category: formData.get('category'),
     memo: formData.get('memo'),
     amount: formData.get('amount'),
   };
 
-  const createResponse = await apiService.createTransaction(
-    finalAccount_id,
-    transactionData,
-  );
+  await apiService.createTransaction(finalAccount_id, transactionData);
 }

@@ -2,8 +2,10 @@ import styles from './AccountModal.module.css';
 import CloseIcon from './CloseIcon';
 import { Form, useLocation } from 'react-router-dom';
 const AddAccountModal = ({ user_id, isOpen, onClose }) => {
-  if (!isOpen) return null;
   const location = useLocation();
+  if (!isOpen) return null;
+
+
   return (
     <div className={styles.modalBackdrop}>
       <div className={styles.modalContainer}>
@@ -15,7 +17,7 @@ const AddAccountModal = ({ user_id, isOpen, onClose }) => {
         </div>
         <div className={styles.modalBody}>
           <p>Account Information</p>
-          <Form method="post" action="/dashboard/account">
+          <Form method="post" action="account">
             <input readOnly type="hidden" name="user_id" value={user_id} />
             <input
               readOnly

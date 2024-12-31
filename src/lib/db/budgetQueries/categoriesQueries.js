@@ -1,15 +1,14 @@
 import pool from '../pool.js';
 
-export const getCategoriesByGroupId = async (groupId) => {
+export const getCategories = async () => {
   try {
     const { rows } = await pool.query(
       `  
         SELECT *   
-        FROM categories  
-        WHERE group_id = $1  
+        FROM categories   
         ORDER BY created_at DESC   
         `,
-      [groupId],
+      [],
     );
     return rows;
   } catch (error) {
@@ -18,15 +17,15 @@ export const getCategoriesByGroupId = async (groupId) => {
   }
 };
 
-export const createCategory = async (groupId, name, assigned = 0) => {
+export const createCategory = async (category_name) => {
   try {
     const { rows } = await pool.query(
       `  
-        INSERT INTO categories (group_id, name, assigned)  
-        VALUES ($1, $2, $3)  
+        INSERT INTO categories (category_name)  
+        VALUES ($1)  
         RETURNING *  
         `,
-      [groupId, name, assigned],
+      [category_name],
     );
     return rows[0];
   } catch (error) {
@@ -35,17 +34,19 @@ export const createCategory = async (groupId, name, assigned = 0) => {
   }
 };
 
-export const updateCategory = async (categoryId, name, assigned) => {
+export const updateCategory = async (categoryId, category_name, assigned) => {
   try {
     const { rows } = await pool.query(
       `  
-        UPDATE categories  
-        SET name = $1, assigned = $2  
-        WHERE category_id = $3  
-        RETURNING *  
-        `,
-      [name, assigned, categoryId],
+          UPDATE categories  
+          SET category_name = $1,
+          SET assigned = $2
+          WHERE category_id = $3  
+          RETURNING *  
+          `,
+      [category_name, assigned, categoryId],
     );
+
     return rows[0];
   } catch (error) {
     console.error('Error updating category:', error);
@@ -63,11 +64,11 @@ export const deleteCategory = async (categoryId) => {
         `,
       [categoryId],
     );
-    if (rows.length === 0) {  
-      throw new Error(`Ctegory with ID ${categoryId} not found`);  
-    }  
+    if (rows.length === 0) {
+      throw new Error(`Ctegory with ID ${categoryId} not found`);
+    }
 
-    return rows[0]; 
+    return rows[0];
   } catch (error) {
     console.error('Error deleting category:', error);
     throw error;

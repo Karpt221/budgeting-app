@@ -1,4 +1,3 @@
-import apiService from './ApiService.js';
 import { redirect } from 'react-router-dom';
 
 export const loadTransactions = async (apiCall) => {
@@ -6,8 +5,10 @@ export const loadTransactions = async (apiCall) => {
   if (!token) return redirect('/sign-in');
 
   try {
-    const user = await apiService.decodeToken(token);
-    const responseObj = await apiCall(user.id);
+    //const user = await apiService.decodeToken(token);
+    console.log(apiCall);
+    const responseObj = await apiCall();
+    console.log(responseObj)
     return responseObj.transactions;
   } catch (error) {
     if (error.code === 403) {

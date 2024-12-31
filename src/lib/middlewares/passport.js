@@ -12,7 +12,7 @@ passport.use(
     },  
     async (jwtPayload, done) => {  
       try {  
-        const user = await findUserById(jwtPayload.id);  
+        const user = await findUserById(jwtPayload.user_id);  
         if (!user) {  
           return done(null, false, { message: 'User not found' });  
         }  

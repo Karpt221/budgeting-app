@@ -18,11 +18,10 @@ export const createBankingAccount = async (
   user_id,
   name,
   balance = 0,
-  is_closed = false,
 ) => {
   try {
     const query = `  
-      INSERT INTO accounts (user_id, name)  
+      INSERT INTO accounts (user_id, account_name)  
       VALUES ($1, $2) 
       RETURNING *;  
     `;
@@ -33,12 +32,11 @@ export const createBankingAccount = async (
     const formattedDate = currentDate.toISOString().split('T')[0];
     createTransaction({
       account_id: rows[0].account_id,
-      date: formattedDate,
+      transaction_date: formattedDate,
       payee: 'Starting Balance',
       category: 'Ready to Assign',
       memo: '',
-      amount: balance,
-      cleared: false,
+      amount: balance
     });
 
     return rows[0];
@@ -70,23 +68,22 @@ export const deleteBankingAccountById = async (account_id) => {
   }
 };
 
-export const updateBankingAccountById = async (account_id, name) => {
+export const updateBankingAccountById = async (account_id, account_name) => {
   try {
     const query = `  
       UPDATE accounts  
       SET  
-        name = COALESCE($2, name)
+        account_name = COALESCE($2, account_name)
       WHERE account_id = $1  
       RETURNING *;  
     `;
-    const values = [account_id, name];
+    const values = [account_id, account_name];
 
     const { rows } = await pool.query(query, values);
 
     if (rows.length === 0) {
       throw new Error(`Account with ID ${account_id} not found`);
     }
-    //return await getAccountsByUserId();
     return rows[0];
   } catch (error) {
     console.error('Error updating account:', error);

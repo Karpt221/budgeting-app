@@ -3,7 +3,7 @@ import styles from './Accounts.module.css';
 import accountEdit from '../../../assets/accountEdit.svg';  
 import { Link } from 'react-router-dom';
 
-const DropdownItem = ({setEditAccount, setIsEditAccountModalOpen, account }) => {  
+const DropdownItem = ({ setEditAccount, setIsEditAccountModalOpen, account }) => {  
   const [isHovering, setIsHovering] = useState(false);
 
   const getTransactions = (event) => {  
@@ -19,7 +19,7 @@ const DropdownItem = ({setEditAccount, setIsEditAccountModalOpen, account }) => 
   return (  
     <li> 
       <Link 
-        to={`/dashboard/transactions/${account.account_id}`} 
+        to={`transactions/${account.account_id}`} 
         onClick={getTransactions}  
         id={account.account_id}  
         className={`${styles.navAccountsBtn} ${styles.account}`}  
@@ -29,7 +29,7 @@ const DropdownItem = ({setEditAccount, setIsEditAccountModalOpen, account }) => 
       >  
         <button>  
           <img onClick={showModal} className={isHovering ? '' : styles.invisible} src={accountEdit} alt={`Edit ${account.name}`} />  
-          <span>{account.name || `Account`}</span>  
+          <span>{account.account_name || `Account`}</span>  
         </button>  
         <span className={styles.accountsSum}>  
           {account.balance || 0}  

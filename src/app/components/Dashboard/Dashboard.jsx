@@ -28,7 +28,7 @@ const Dashboard = () => {
           </li>
         </ul>
         <Accounts
-          user_id={userData.id}
+          user_id={userData.user_id}
           accounts={userData.accounts}
         />
       </nav>

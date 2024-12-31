@@ -12,7 +12,7 @@ function Transactions() {
   const [selectedTransactions, setSelectedTransactions] = useState([]);
   const [isAddTransactionFormOpen, setIsAddTransactionFormOpen] =
     useState(false);
-  const [editingTransaction, setEditingTransaction] = useState(null); // New state for editing
+  const [editingTransaction, setEditingTransaction] = useState(null);
 
   useEffect(() => {
     if (transactionsData.account_id !== null) {
@@ -51,15 +51,14 @@ function Transactions() {
 
   const handleRowClick = (transaction) => {
     if (selectedTransactions.includes(transaction.transaction_id)) {
-      // If the row is already selected, set it for editing
       setEditingTransaction(transaction);
     } else {
-      // Otherwise, select the transaction
       setSelectedTransactions([transaction.transaction_id]);
-      setEditingTransaction(null); // Clear editing if a new transaction is selected
+      setEditingTransaction(null);
     }
   };
 
+  // Move handleAddFormOpen outside of handleRowClick
   const handleAddFormOpen = () => {
     setIsAddTransactionFormOpen(true);
     setSelectedTransactions([]);
@@ -68,7 +67,7 @@ function Transactions() {
   return (
     <>
       <div className={styles.transactionsTitle}>
-        <h2>{currentAccount ? currentAccount.name : 'All Accounts'}</h2>
+        <h2>{currentAccount ? currentAccount.account_name : 'All Accounts'}</h2>
       </div>
       <hr />
       <div className={styles.transactionsToolbar}>
@@ -77,11 +76,7 @@ function Transactions() {
         </button>
         <Form
           method="post"
-          action={
-            currentAccount
-              ? `/dashboard/transactions/${currentAccount.account_id}`
-              : '/dashboard/transactions'
-          }
+          action=''
         >
           <input
             type="hidden"
@@ -105,11 +100,7 @@ function Transactions() {
       </div>
       <Form
         method="post"
-        action={
-          currentAccount
-            ? `/dashboard/transactions/${currentAccount.account_id}`
-            : '/dashboard/transactions'
-        }
+        action=''
       >
         <table>
           <thead>
@@ -148,11 +139,12 @@ function Transactions() {
               editingTransaction.transaction_id ===
                 transaction.transaction_id ? (
                 <TransactionForm
+                  key={transaction.transaction_id}
                   action="edit"
                   accounts={accounts}
-                  onCancel={() => setEditingTransaction(null)} // Clear editing transaction
+                  onCancel={() => setEditingTransaction(null)}
                   currentAccount={currentAccount}
-                  transaction={editingTransaction} // Pass transaction data to the form
+                  transaction={editingTransaction}
                 />
               ) : (
                 <tr
@@ -185,11 +177,11 @@ function Transactions() {
                         accounts.find(
                           (account) =>
                             account.account_id === transaction.account_id,
-                        ).name
+                        ).account_name
                       }
                     </td>
                   )}
-                  <td>{transaction.date.split('T')[0]}</td>
+                  <td>{transaction.transaction_date.split('T')[0]}</td>
                   <td>{transaction.payee}</td>
                   <td>{transaction.category}</td>
                   <td>{transaction.memo || '-'}</td>

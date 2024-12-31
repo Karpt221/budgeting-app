@@ -16,6 +16,7 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const { user_id } = req.params;
+    console.log('getTransactionsByUserId: ',user_id);
     const transactions = await getTransactionsByUserId(user_id);
     res.json({
       message: 'All user transaction was transferred successfully!',
@@ -42,9 +43,11 @@ router.post(
   async (req, res, next) => {
     try {
       const { account_id } = req.params;
-      const { date, payee, category, memo, amount } = req.body;
-
-      if (!date || !payee || !category || !amount) {
+      const { transaction_date, payee, category, memo, amount } = req.body;
+      console.log(transaction_date, payee, category, memo, amount);
+      console.log(req.body);
+      console.log(req.params);
+      if (!transaction_date || !payee || !category || !amount) {
         return res
           .status(400)
           .json({ code: 400, message: 'Missing required fields' });
@@ -52,7 +55,7 @@ router.post(
 
       const newTransaction = await createTransaction({
         account_id,
-        date,
+        transaction_date,
         payee,
         category,
         memo,

@@ -5,7 +5,7 @@ import { Form,useLocation } from 'react-router-dom';
 const EditAccountModal = ({ account, isOpen, onClose }) => {
   if (!isOpen) return null;
   const location = useLocation();
-  // console.log(location.pathname);
+  
   return (
     <div className={styles.modalBackdrop}>
       <div className={styles.modalContainer}>
@@ -17,7 +17,7 @@ const EditAccountModal = ({ account, isOpen, onClose }) => {
         </div>
         <div className={styles.modalBody}>
           <p>Account Information</p>
-          <Form method="post" action="/dashboard/account">
+          <Form method="post" action="account">
             <input
               readOnly
               type="hidden"
@@ -35,20 +35,10 @@ const EditAccountModal = ({ account, isOpen, onClose }) => {
               <input
                 type="text"
                 name="name"
-                defaultValue={account.name}
+                defaultValue={account.account_name}
                 required
               />
             </div>
-            {/* <div className={styles.inputGroup}>
-              <label>Working Balance</label>
-              <input
-                type="text"
-                name="balance"
-                placeholder="0,00"
-                defaultValue={account.balance}
-                required
-              />
-            </div> */}
             <div className={styles.modalFooter}>
               <button
                 type="submit"

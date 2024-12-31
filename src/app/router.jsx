@@ -24,12 +24,13 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: () => {
+        loader: async () => {
           const token = localStorage.getItem('budgeting-user-token');
           if (!token) {
             return redirect('/sign-in');
           } else {
-            return redirect('/dashboard/transactions');
+            const user = await apiService.decodeToken(token);
+            return redirect(`${user.user_id}/dashboard/transactions`);
           }
         },
       },
@@ -42,8 +43,11 @@ const router = createBrowserRouter([
           const password = formData.get('password');
           try {
             const { token } = await apiService.signIn(email, password);
+            console.log(token);
             localStorage.setItem('budgeting-user-token', token);
-            return redirect('/dashboard/transactions');
+            const user = await apiService.decodeToken(token);
+            console.log(user);
+            return redirect(`/${user.user_id}/dashboard/transactions`);
           } catch (error) {
             return { error: error.message };
           }
@@ -57,7 +61,7 @@ const router = createBrowserRouter([
           const email = formData.get('email');
           const password = formData.get('password');
           try {
-            const res = await apiService.signUp(email, password);
+            await apiService.signUp(email, password);
             return redirect('/sign-in');
           } catch (error) {
             return { error: error.message };
@@ -65,17 +69,17 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: '/dashboard',
+        path: ':user_id/dashboard',
         element: <Dashboard />,
-        loader: async () => {
+        loader: async ({ params }) => {
           const token = localStorage.getItem('budgeting-user-token');
           if (!token) return redirect('/sign-in');
           try {
-            const user = await apiService.decodeToken(token);
-            const userAccounts = await apiService.getAccounts(user.id);
+            const userAccounts = await apiService.getAccounts(params.user_id);
+            const user = await apiService.getUserByID(params.user_id);
             return {
               email: user.email,
-              id: user.id,
+              user_id: user.user_id,
               accounts: userAccounts.accounts,
             };
           } catch (error) {
@@ -98,30 +102,28 @@ const router = createBrowserRouter([
           {
             path: 'transactions',
             element: <Transactions />,
-            loader: async () => {
+            loader: async ({ params }) => {
+              console.log(params.user_id);
               return {
                 transactions: await loadTransactions(
-                  async (userId) => await apiService.getTransactions(userId),
+                  async () => await apiService.getTransactions(params.user_id),
                 ),
                 account_id: null,
+                
               };
             },
             action: async ({ request }) => {
               const formData = await request.formData();
               const action = formData.get('action');
               try {
-                //let redirectLocation = '/dashboard';
                 if (action === 'edit') {
-                  handleEditTransaction(formData);
-                  //redirectLocation = formData.get('previousLocation');
+                  await handleEditTransaction(formData);
                 } else if (action === 'delete') {
-                  handleDeleteTransaction(formData);
-                  //redirectLocation = '/dashboard/transactions';
+                  await handleDeleteTransaction(formData);
                 } 
                 else if (action === 'create') {
-                  handleCreateTransaction(formData);
+                  await handleCreateTransaction(formData);
                 }
-                //return redirect(`${redirectLocation}?modalClosed=true`);
               } catch (error) {
                 throw new Error(error);
               }
@@ -134,7 +136,7 @@ const router = createBrowserRouter([
               const { account_id } = params;
               return {
                 transactions: await loadTransactions(
-                  async (userId) =>
+                  async () =>
                     await apiService.getTransactionsByAccount(account_id),
                 ),
                 account_id,
@@ -145,18 +147,14 @@ const router = createBrowserRouter([
               const formData = await request.formData();
               const action = formData.get('action');
               try {
-                //let redirectLocation = '/dashboard';
                 if (action === 'edit') {
-                  handleEditTransaction(formData, account_id);
-                  //redirectLocation = formData.get('previousLocation');
+                  await handleEditTransaction(formData, account_id);
                 } else if (action === 'delete') {
-                  handleDeleteTransaction(formData);
-                  //redirectLocation = '/dashboard/transactions';
+                  await handleDeleteTransaction(formData);
                 } 
                 else if (action === 'create') {
                   await handleCreateTransaction(formData, account_id);
                 }
-                //return redirect(`${redirectLocation}?modalClosed=true`);
               } catch (error) {
                 throw new Error(error);
               }
@@ -164,17 +162,16 @@ const router = createBrowserRouter([
           },
           {
             path: 'account',
-            action: async ({ request }) => {
+            action: async ({ params,request }) => {
               const formData = await request.formData();
               const action = formData.get('action');
               try {
-                let redirectLocation = '/dashboard';
+                let redirectLocation = `/${params.user_id}/dashboard/transactions`;
                 if (action === 'edit') {
-                  handleEditAccount(formData);
+                  await handleEditAccount(formData);
                   redirectLocation = formData.get('previousLocation');
                 } else if (action === 'delete') {
-                  handleDeleteAccount(formData);
-                  redirectLocation = '/dashboard/transactions';
+                  await handleDeleteAccount(formData);
                 } else if (action === 'create') {
                   redirectLocation = await handleCreateAccount(formData);
                 }

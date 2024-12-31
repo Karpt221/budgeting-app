@@ -26,6 +26,7 @@ router.get('/:token', (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    console.log(decoded);
     return res.status(200).json(decoded);
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {
@@ -51,11 +52,11 @@ router.post('/sign-in', async (req, res, next) => {
       return res.status(401).json({code: 401, message: 'Incorrect password' });
     }
     console.log(user);
-    const token = jwt.sign({ id: user.user_id, email: user.email }, JWT_SECRET, {
+    const token = jwt.sign({ user_id: user.user_id, email: user.email }, JWT_SECRET, {
       expiresIn: '24h',
     });
-
-    res.json({ token });
+    console.log(token);
+    res.json({ token: token });
   } catch (err) {
     next(err);
   }

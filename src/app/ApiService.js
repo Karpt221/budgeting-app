@@ -55,6 +55,11 @@ class ApiService {
     return this.fetchData(`/auth/${token}`);
   }
 
+  async getUserByID(user_id) {
+    console.log('getUserByID: ',user_id);
+    return this.fetchData(`/${user_id}`);
+  }
+
   // Accounts methods
   async getAccounts(userId) {
     return this.fetchData(`/${userId}/accounts`);
@@ -82,6 +87,7 @@ class ApiService {
 
   // Transactions methods
   async getTransactions(userId) {
+    console.log('getTransactions', userId);
     return this.fetchData(`/${userId}/transactions`);
   }
 
@@ -113,12 +119,12 @@ class ApiService {
 
 
   // Categories methods
-  async getCategoriesByGroupId(groupId) {
-    return this.fetchData(`/users/categories`);
+  async getCategorie(userId) {
+    return this.fetchData(`/${userId}/categories`);
   }
 
-  async createCategory(groupId, name) {
-    return this.fetchData(`/users/categories`, {
+  async createCategory(userId, name) {
+    return this.fetchData(`/${userId}/categories`, {
       method: 'POST',
       body: JSON.stringify({ name }),
     });
@@ -138,29 +144,29 @@ class ApiService {
   }
 
   // Target methods
-  async getTargetByCategoryId(categoryId) {
-    return this.fetchData(`/users/categories/${categoryId}/target`);
-  }
+  // async getTargetByCategoryId(categoryId) {
+  //   return this.fetchData(`/users/categories/${categoryId}/target`);
+  // }
 
-  async createTarget(categoryId, targetData) {
-    return this.fetchData(`/users/categories/${categoryId}/target`, {
-      method: 'POST',
-      body: JSON.stringify(targetData),
-    });
-  }
+  // async createTarget(categoryId, targetData) {
+  //   return this.fetchData(`/users/categories/${categoryId}/target`, {
+  //     method: 'POST',
+  //     body: JSON.stringify(targetData),
+  //   });
+  // }
 
-  async updateTarget(categoryId, targetData) {
-    return this.fetchData(`/users/categories/${categoryId}/target`, {
-      method: 'PUT',
-      body: JSON.stringify(targetData),
-    });
-  }
+  // async updateTarget(categoryId, targetData) {
+  //   return this.fetchData(`/users/categories/${categoryId}/target`, {
+  //     method: 'PUT',
+  //     body: JSON.stringify(targetData),
+  //   });
+  // }
 
-  async deleteTarget(categoryId) {
-    return this.fetchData(`/users/categories/${categoryId}/target`, {
-      method: 'DELETE',
-    });
-  }
+  // async deleteTarget(categoryId) {
+  //   return this.fetchData(`/users/categories/${categoryId}/target`, {
+  //     method: 'DELETE',
+  //   });
+  // }
 }
 
 const apiService = new ApiService('/api');

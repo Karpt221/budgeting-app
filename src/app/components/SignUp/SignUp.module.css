@@ -17,7 +17,6 @@
     margin-bottom: 1.5rem;
     text-align: left;
   }
-  
 
   & input {
     font-size: 20px;
@@ -65,26 +64,24 @@
   & p a:hover {
     text-decoration: underline;
   }
-  
-  .passwordContainer {  
-    position: relative; /* Space for the eye icon */  
-  }  
 
- 
-  
-  .eyeButton {  
-    position: absolute; /* Position the button inside the input */  
-    background: none; /* Remove default button styles */  
-    border: none; /* Remove border */  
-    cursor: pointer; /* Pointer cursor on hover */  
-    outline: none; /* Remove outline */ 
-    transform: translateY(-95%); 
+  .passwordContainer {
+    position: relative;
+  }
+
+  .eyeButton {
+    position: absolute;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transform: translateY(-80%);
     left: 101%;
-  }  
-  
-  .eyeButton svg {  
-    width: 24px; /* Set icon size */  
-    height: 24px; /* Set icon size */  
+  }
+
+  .eyeButton svg {
+    width: 24px;
+    height: 24px;
     stroke: #333;
-  }  
+  }
 }
