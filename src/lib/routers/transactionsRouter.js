@@ -43,11 +43,11 @@ router.post(
   async (req, res, next) => {
     try {
       const { account_id } = req.params;
-      const { transaction_date, payee, category, memo, amount } = req.body;
-      console.log(transaction_date, payee, category, memo, amount);
+      const { transaction_date, payee, category,category_id, memo, amount } = req.body;
+      console.log(transaction_date, payee, category,category_id, memo, amount);
       console.log(req.body);
       console.log(req.params);
-      if (!transaction_date || !payee || !category || !amount) {
+      if (!transaction_date || !payee || !category || !category_id || !amount) {
         return res
           .status(400)
           .json({ code: 400, message: 'Missing required fields' });
@@ -58,6 +58,7 @@ router.post(
         transaction_date,
         payee,
         category,
+        category_id,
         memo,
         amount,
       });

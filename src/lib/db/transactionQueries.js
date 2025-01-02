@@ -34,14 +34,14 @@ export const getTransactionsByAccountId = async (accountId) => {
 
 export const createTransaction = async (transactionData) => {
   try {
-    const { account_id, transaction_date, payee, category, memo, amount } = transactionData;
+    const { account_id, transaction_date, payee, category,category_id, memo, amount } = transactionData;
     console.log(transactionData);
     const query = `  
-        INSERT INTO transactions (account_id, transaction_date, payee, category, memo, amount)  
-        VALUES ($1, $2, $3, $4, $5, $6)  
+        INSERT INTO transactions (account_id, transaction_date, payee, category, category_id, memo, amount)  
+        VALUES ($1, $2, $3, $4, $5, $6, $7)  
         RETURNING *;  
       `;
-    const values = [account_id, transaction_date, payee, category, memo, amount];
+    const values = [account_id, transaction_date, payee, category,category_id, memo, amount];
 
     const { rows } = await pool.query(query, values);
 
@@ -76,7 +76,7 @@ export const deleteTransactionsByIds = async (transaction_ids) => {
 
 export const updateTransactionById = async (transaction_id, updates) => {
   try {
-    const { account_id, transaction_date, payee, category, memo, amount } = updates;
+    const { account_id, transaction_date, payee, category,category_id, memo, amount } = updates;
 
     const query = `  
       UPDATE transactions  
@@ -84,9 +84,10 @@ export const updateTransactionById = async (transaction_id, updates) => {
         account_id = COALESCE($2, account_id),
         transaction_date = COALESCE($3, transaction_date),  
         payee = COALESCE($4, payee),  
-        category = COALESCE($5, category),  
-        memo = COALESCE($6, memo),  
-        amount = COALESCE($7, amount)
+        category = COALESCE($5, category),
+        category_id  = COALESCE($6, category_id),
+        memo = COALESCE($7, memo),  
+        amount = COALESCE($8, amount)
       WHERE transaction_id = $1  
       RETURNING *;  
     `;
@@ -98,6 +99,7 @@ export const updateTransactionById = async (transaction_id, updates) => {
       transaction_date,
       payee,
       category,
+      category_id,
       memo,
       amount
     ];

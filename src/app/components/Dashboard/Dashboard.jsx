@@ -4,7 +4,6 @@ import styles from './Dashboard.module.css';
 import SidebarContextMenu from './SidebarContextMenu/SidebarContextMenu';
 import Accounts from './Accounts/Accounts';
 
-
 const Dashboard = () => {
   const userData = useLoaderData();
 
@@ -21,20 +20,22 @@ const Dashboard = () => {
             <Link to="budget">Budget</Link>
           </li>
           <li className={styles.sidebarNavItem}>
-            <Link to="reports">Reports</Link>
+            <Link to="reports/spending-breakdown">Reports</Link>
           </li>
           <li className={styles.sidebarNavItem}>
             <Link to="transactions">All accounts</Link>
           </li>
         </ul>
-        <Accounts
-          user_id={userData.user_id}
-          accounts={userData.accounts}
-        />
+        <Accounts user_id={userData.user_id} accounts={userData.accounts} />
       </nav>
 
       <main className={styles.mainContainer}>
-        <Outlet  context={{categories: userData.categories, accounts: userData.accounts }} />
+        <Outlet
+          context={{
+            accounts: userData.accounts,
+            categories: userData.categories,
+          }}
+        />
       </main>
     </div>
   );

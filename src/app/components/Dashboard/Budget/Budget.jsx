@@ -2,9 +2,19 @@ import styles from './Budget.module.css';
 
 function Budget() {
   return (
-    <div>
-      <input type="month" name="" id="" />
-    </div>
+    <>
+      <header className={styles.budgetHeader}>
+        <div className={styles.budgetDate}></div>
+        <div className={styles.budgetTotals}></div>
+      </header>
+      <main className={styles.budgetTable}>
+
+
+      </main>
+      <aside className={styles.budgetInspector}>
+
+      </aside>
+    </>
   );
 }
 

@@ -1,0 +1,137 @@
+.reportsHeader {
+  display: flex;
+  gap: 20px;
+  & a {
+    padding: 10px;
+    margin: 0 10px;
+  }
+}
+.reportsWrapper {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 55px 1fr;
+}
+.selectedReport {
+  border-bottom: 5px solid blueviolet;
+}
+
+.spendingBreakdownMain {
+  display: grid;
+  grid-template-rows: 120px 1fr;
+  background-color: rgb(223, 221, 229);
+  padding: 0 20px;
+  padding-bottom: 20px;
+  overflow: auto;
+  & h2 {
+    margin: 0;
+    padding: 5px 0;
+  }
+}
+
+.spendingBreakdownFilters form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.spendingBreakdownFilters .SumbitBtn {
+  color: rgb(97, 73, 253);
+  font-size: 20px;
+  background-color: white;
+  width: 100px;
+  height: 43px;
+}
+
+.spendingBreakdownFilters .SumbitBtn:hover {
+  background-color: rgb(206, 203, 228);
+}
+
+.spendingBreakdownContent {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.spendingBreakdownContentLeftColumn {
+  display: grid;
+  grid-template-rows: 1fr 200px;
+  gap: 20px;
+}
+
+.spendingBreakdownContentChart {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.spendingBreakdownContentMetrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 20px;
+  background-color: #ffffff; /* Example background color for metrics */
+  padding: 20px; /* Padding inside the metrics */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.spendingBreakdownContentSidebar {
+  background-color: #ffffff; /* Example background color for the sidebar */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.spendingBreakdownContentChartHeader {
+  display: flex;
+  justify-content: start;
+}
+
+.spendingBreakdownContentChartHeaderSpendingWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.spendingBreakdownContentLabel {
+  color: rgb(111, 100, 100);
+  font-size: 18px;
+}
+.spendingBreakdownContentSpendingNum {
+  font-weight: 900;
+  font-size: 35px;
+}
+.spendingBreakdownContentMetricsItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.spendingBreakdownContentMetricsValue {
+  font-size: 20px;
+}
+
+.spendingBreakdownContentSidebarHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.spendingBreakdownContentSidebarContent {
+  border-top: 2px solid rgb(223, 221, 229);
+}
+
+.spendingBreakdownContentChartDonut{
+  width: 70%; 
+  margin: 0 auto;
+}
+
+.spendingTrendsContent {
+  gap: 20px;
+  display: grid;
+  grid-template-rows: 500px 200px;
+}
+
+#multipleCheckbox {
+  font-size: 18px;
+  box-sizing: border-box;
+  height: 43px;
+}
+
+#multipleCheckboxLabel {
+  font-size: 18px;
+}

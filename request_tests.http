@@ -1,3 +1,66 @@
+POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/reports/spending-breakdown HTTP/1.1  
+content-Type: application/json  
+
+{
+    "startDate": "2024-12",
+    "endDate": "2025-02",
+    "categories": [
+        "b3ebfb19-ff71-4410-9586-f792a9a98b91",
+        "1f695803-f553-4b84-bb8f-8017a3cfca6e",
+        "401771a6-6ea6-4468-891a-b6ff4784ffab",
+        "7f26a33c-5c93-45a6-a1a1-f69947389b15"
+    ],
+    "accounts": [
+        "dcd70c3e-4546-4714-9e96-0ecf601e227b",
+        "95d93c43-f7fd-4d5c-ab3b-84072beeaa95"
+    ]
+}
+
+# "spendingsBreakdown": {
+#     "spendingsByCategories": [
+#       {
+#         "x": "Category 2\n87878 $\n99%",
+#         "y": "99",
+#         "color": "#681c1b",
+#         "category_name": "Category 2",
+#         "amount": "87878",
+#         "percent": "99"
+#       },
+#       {
+#         "x": "Category 1\n500 $\n1%",
+#         "y": "1",
+#         "color": "#2137d0",
+#         "category_name": "Category 1",
+#         "amount": "500",
+#         "percent": "1"
+#       },
+#       {
+#         "x": "Category 3\n474 $\n1%",
+#         "y": "1",
+#         "color": "#c5f606",
+#         "category_name": "Category 3",
+#         "amount": "474",
+#         "percent": "1"
+#       }
+#     ],
+#     "spendingStats": {
+#       "avg_monthly_spending": "29617.33",
+#       "avg_daily_spending": "29617.00",
+#       "most_frequent_category_name": "Category 3",
+#       "most_frequent_category_transactions": "1",
+#       "largest_outflow_category": "Category 2",
+#       "largest_outflow_amount": 87878
+#     }
+#   }
+
+# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/accounts/ HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "New acc",
+#     "balance": "999"
+# }
+
 # GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups HTTP/1.1
 
 # POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups HTTP/1.1  

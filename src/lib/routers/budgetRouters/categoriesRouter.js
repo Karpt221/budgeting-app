@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
 import {
-  getCategories,
+  getCategoriesByUserId,
   createCategory,
   updateCategory,
   deleteCategory,
@@ -15,7 +15,9 @@ categoriesRouter.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
-      const categories = await getCategories();
+      const { user_id } = req.params;
+      const categories = await getCategoriesByUserId(user_id);
+      console.log(categories);
       res.json({
         message: 'Fetched categories successfully',
         categories,

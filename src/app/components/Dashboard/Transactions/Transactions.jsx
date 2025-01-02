@@ -13,7 +13,7 @@ function Transactions() {
   const [isAddTransactionFormOpen, setIsAddTransactionFormOpen] =
     useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
-
+  console.log(transactionsData);
   useEffect(() => {
     if (transactionsData.account_id !== null) {
       const account = accounts.find(

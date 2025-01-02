@@ -25,8 +25,18 @@ CREATE TABLE transactions (
     payee VARCHAR(255),  
     memo TEXT,  
     amount INTEGER,  
-    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP  
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+    category_id UUID REFERENCES categories(category_id) ON DELETE CASCADE,
+    category VARCHAR(255)
 );  
+
+CREATE OR REPLACE FUNCTION generate_random_color()  
+RETURNS CHAR(7) AS $$  
+BEGIN  
+    RETURN '#' || LPAD(TO_HEX(FLOOR(RANDOM() * 16777215)::INT), 6, '0');  
+END;  
+$$ LANGUAGE plpgsql;  
+
 
 CREATE TABLE categories (  
     category_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),  
@@ -36,7 +46,8 @@ CREATE TABLE categories (
     activity INTEGER NOT NULL DEFAULT 0,   
     available INTEGER NOT NULL DEFAULT 0,  
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,  
-    UNIQUE (user_id, category_name)
+    UNIQUE (user_id, category_name),
+    category_color CHAR(7) DEFAULT generate_random_color()
 );  
 
 INSERT INTO categories (category_name, assigned, activity, available)  

@@ -20,15 +20,38 @@
 -- ALTER COLUMN category_name SET DEFAULT 'Ready to Assign';  
 -- INSERT INTO categories (category_name, user_id)
 -- VALUES (
---         'Category 1',
+--         'Rent',
 --         '4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c'
 --     ),
 --     (
---         'Category 2',
+--         'Groceries',
 --         '4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c'
 --     ),
 --     (
---         'Category 3',
+--         'Car Maintenance',
+--         '4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c'
+--     ),
+--     (
+--         'Medical Treatment',
 --         '4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c'
 --     );
 
+-- ALTER TABLE transactions
+-- Add COLUMN category_id UUID REFERENCES categories(category_id) ON DELETE CASCADE
+
+-- ALTER TABLE categories
+-- ADD COLUMN category_color CHAR(7);
+
+-- CREATE OR REPLACE FUNCTION generate_random_color()  
+-- RETURNS CHAR(7) AS $$  
+-- BEGIN  
+--     RETURN '#' || LPAD(TO_HEX(FLOOR(RANDOM() * 16777215)::INT), 6, '0');  
+-- END;  
+-- $$ LANGUAGE plpgsql;  
+
+-- ALTER TABLE categories  
+-- ALTER COLUMN category_color SET DEFAULT generate_random_color();  
+
+
+-- INSERT INTO categories (category_name, assigned, activity, available)  
+-- VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT);  

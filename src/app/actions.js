@@ -28,12 +28,14 @@ export async function handleEditTransaction(formData, account_id = null) {
     finalAccount_id = formAccount_id;
   }
   const transactionId = formData.get('transaction_id');
-  console.log('handleEditTransaction:', transactionId);
+  const category_name = formData.get('category').split(',')[0];
+  const category_id = formData.get('category').split(',')[1];
   const updates = {
     account_id: finalAccount_id,
     transaction_date: formData.get('transaction_date'),
     payee: formData.get('payee'),
-    category: formData.get('category'),
+    category: category_name,
+    category_id: category_id,
     memo: formData.get('memo'),
     amount: formData.get('amount'),
   };
@@ -53,11 +55,13 @@ export async function handleCreateTransaction(formData, account_id = null) {
   } else {
     finalAccount_id = formAccount_id;
   }
-
+  const category_name = formData.get('category').split(',')[0];
+  const category_id = formData.get('category').split(',')[1];
   const transactionData = {
     transaction_date: formData.get('transaction_date'),
     payee: formData.get('payee'),
-    category: formData.get('category'),
+    category: category_name,
+    category_id: category_id,
     memo: formData.get('memo'),
     amount: formData.get('amount'),
   };

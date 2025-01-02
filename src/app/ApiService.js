@@ -19,7 +19,7 @@ class ApiService {
         headers: {
           'Content-Type': 'application/json',
           ...options.headers,
-          Authorization: `Bearer ${localStorage.getItem('budgeting-user-token')}`, // Include JWT token if available
+          Authorization: `Bearer ${localStorage.getItem('budgeting-user-token')}`,
         },
       });
 
@@ -117,7 +117,6 @@ class ApiService {
     });
   }
 
-
   // Categories methods
   async getCategorie(userId) {
     return this.fetchData(`/${userId}/categories`);
@@ -140,6 +139,15 @@ class ApiService {
   async deleteCategory(categoryId) {
     return this.fetchData(`/users/categories/${categoryId}`, {
       method: 'DELETE',
+    });
+  }
+
+  //Reports
+
+  async getSpendingsByCategories(filters) {
+    return this.fetchData(`/users/reports/spending-breakdown`, {
+      method: 'POST',
+      body: JSON.stringify(filters),
     });
   }
 

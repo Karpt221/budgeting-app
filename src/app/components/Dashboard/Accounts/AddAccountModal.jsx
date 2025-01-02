@@ -5,7 +5,6 @@ const AddAccountModal = ({ user_id, isOpen, onClose }) => {
   const location = useLocation();
   if (!isOpen) return null;
 
-
   return (
     <div className={styles.modalBackdrop}>
       <div className={styles.modalContainer}>
@@ -31,7 +30,16 @@ const AddAccountModal = ({ user_id, isOpen, onClose }) => {
             </div>
             <div className={styles.inputGroup}>
               <label>Working Balance</label>
-              <input type="text" name="balance" placeholder="0,00" required />
+              <input
+                type="text"
+                name="balance"
+                id="balance"
+                required
+                pattern="[0-9]*$"
+                onInput={(e) => {
+                  e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                }}
+              />
             </div>
             <div className={styles.modalFooter}>
               <button

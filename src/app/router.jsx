@@ -6,6 +6,8 @@ import SignUp from './components/SignUp/SignUp';
 import Dashboard from './components/Dashboard/Dashboard';
 import Budget from './components/Dashboard/Budget/Budget';
 import Reports from './components/Dashboard/Reports/Reports';
+import SpendingBreakdown from './components/Dashboard/Reports/SpendingBreakdown';
+import SpendingTrends from './components/Dashboard/Reports/SpendingTrends';
 import Transactions from './components/Dashboard/Transactions/Transactions';
 import {
   handleEditAccount,
@@ -15,7 +17,9 @@ import {
   handleDeleteTransaction,
   handleEditTransaction,
 } from './actions.js';
-import { loadTransactions } from './loaders.js';
+import { loadTransactions, getMinMaxDate } from './loaders.js';
+
+
 
 const router = createBrowserRouter([
   {
@@ -25,12 +29,19 @@ const router = createBrowserRouter([
       {
         index: true,
         loader: async () => {
-          const token = localStorage.getItem('budgeting-user-token');
-          if (!token) {
-            return redirect('/sign-in');
-          } else {
-            const user = await apiService.decodeToken(token);
-            return redirect(`${user.user_id}/dashboard/transactions`);
+          try {
+            const token = localStorage.getItem('budgeting-user-token');
+            if (!token) {
+              return redirect('/sign-in');
+            } else {
+              const user = await apiService.decodeToken(token);
+              return redirect(`${user.user_id}/dashboard/transactions`);
+            }
+          } catch (error) {
+            if (error.code === 403) {
+              localStorage.removeItem('budgeting-user-token');
+              return redirect('/sign-in');
+            }
           }
         },
       },
@@ -49,6 +60,10 @@ const router = createBrowserRouter([
             console.log(user);
             return redirect(`/${user.user_id}/dashboard/transactions`);
           } catch (error) {
+            if (error.code === 403) {
+              localStorage.removeItem('budgeting-user-token');
+              return redirect('/sign-in');
+            }
             return { error: error.message };
           }
         },
@@ -77,12 +92,16 @@ const router = createBrowserRouter([
           try {
             const userAccounts = await apiService.getAccounts(params.user_id);
             const user = await apiService.getUserByID(params.user_id);
-            const categoriesResponse = await apiService.getCategorie(params.user_id);
+            console.log(params.user_id);
+            const categoriesResponse = await apiService.getCategorie(
+              params.user_id,
+            );
+
             return {
               email: user.email,
               user_id: user.user_id,
               accounts: userAccounts.accounts,
-              categories:categoriesResponse.categories,
+              categories: categoriesResponse.categories,
             };
           } catch (error) {
             if (error.code === 403) {
@@ -100,6 +119,78 @@ const router = createBrowserRouter([
           {
             path: 'reports',
             element: <Reports />,
+            loader: async ({ params }) => {
+              return await loadTransactions(
+                async () => await apiService.getTransactions(params.user_id),
+              );
+            },
+            children: [
+              {
+                path: 'spending-breakdown',
+                element: <SpendingBreakdown />,
+                loader: async ({ params }) => {
+                  try {
+                    const transactions = await loadTransactions(
+                      async () =>
+                        await apiService.getTransactions(params.user_id),
+                    );
+                    const accountsResponse = await apiService.getAccounts(
+                      params.user_id,
+                    );
+                    const categoriesResponse = await apiService.getCategorie(
+                      params.user_id,
+                    );
+                    console.log(transactions,accountsResponse.accounts,categoriesResponse.categories);
+                    const {minDate, maxDate} = getMinMaxDate(transactions);
+                    const categories_ids = categoriesResponse.categories.map((category)=>{
+                      return category.category_id;
+                    });
+                    const accounts_ids = accountsResponse.accounts.map((account)=>{
+                      return account.account_id;
+                    });
+                    const initialData =
+                      await apiService.getSpendingsByCategories({
+                        startDate: minDate,
+                        endDate: maxDate,
+                        categories: categories_ids, 
+                        accounts: accounts_ids, 
+                      });
+                    return initialData.spendingsBreakdown; 
+                  } catch (error) {
+                    throw new Error(error);
+                  }
+                },
+                action: async ({ request }) => {
+                  try {
+                    const formData = await request.formData();
+                    const spendingBreakdownResponse =
+                      await apiService.getSpendingsByCategories({
+                        startDate: formData.get('startDate'),
+                        endDate: formData.get('endDate'),
+                        categories: formData.get('categories').split(','),
+                        accounts: formData.get('accounts').split(','),
+                      });
+                    return spendingBreakdownResponse.spendingsBreakdown;
+                  } catch (error) {
+                    throw new Error(error);
+                  }
+                },
+              },
+              {
+                path: 'spending-trends',
+                element: <SpendingTrends />,
+                action: async ({ request }) => {
+                  const formData = await request.formData();
+
+                  return {
+                    startDate: formData.get('startDate'),
+                    endDate: formData.get('endDate'),
+                    categories: formData.get('categories').split(','),
+                    accounts: formData.get('accounts').split(','),
+                  };
+                },
+              },
+            ],
           },
           {
             path: 'transactions',
@@ -111,7 +202,6 @@ const router = createBrowserRouter([
                   async () => await apiService.getTransactions(params.user_id),
                 ),
                 account_id: null,
-                
               };
             },
             action: async ({ request }) => {
@@ -122,8 +212,7 @@ const router = createBrowserRouter([
                   await handleEditTransaction(formData);
                 } else if (action === 'delete') {
                   await handleDeleteTransaction(formData);
-                } 
-                else if (action === 'create') {
+                } else if (action === 'create') {
                   await handleCreateTransaction(formData);
                 }
               } catch (error) {
@@ -144,7 +233,7 @@ const router = createBrowserRouter([
                 account_id,
               };
             },
-            action: async ({request, params }) => {
+            action: async ({ request, params }) => {
               const { account_id } = params;
               const formData = await request.formData();
               const action = formData.get('action');
@@ -153,18 +242,17 @@ const router = createBrowserRouter([
                   await handleEditTransaction(formData, account_id);
                 } else if (action === 'delete') {
                   await handleDeleteTransaction(formData);
-                } 
-                else if (action === 'create') {
+                } else if (action === 'create') {
                   await handleCreateTransaction(formData, account_id);
                 }
               } catch (error) {
                 throw new Error(error);
               }
-            }
+            },
           },
           {
             path: 'account',
-            action: async ({ params,request }) => {
+            action: async ({ params, request }) => {
               const formData = await request.formData();
               const action = formData.get('action');
               try {

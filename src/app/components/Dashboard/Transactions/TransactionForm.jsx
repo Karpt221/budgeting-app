@@ -2,16 +2,14 @@ import styles from './Transactions.module.css';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 
-
 const TransactionForm = ({
   action,
   accounts,
   onCancel,
   currentAccount,
   transaction,
-  categories
+  categories,
 }) => {
-
   console.log(categories);
 
   return (
@@ -67,29 +65,23 @@ const TransactionForm = ({
           />
         </td>
         <td>
-        <select
-              name="category"
-              id="category"
-              required
-              defaultValue={transaction?.category || ''} 
-            >
-              {categories.map((category) => (
-                <option
-                  key={category.category_id}
-                  value={category.category_id}
-                >
-                  {category.category_name}
-                </option>
-              ))}
-            </select>
-          {/* <input  
-            type="text"  
-            name="category"  
-            id="category"  
-            placeholder="category"  
-            required  
-            defaultValue={transaction?.category || ''}  
-          />   */}
+          <select
+            name="category"
+            id="category"
+            required
+            defaultValue={
+              transaction?.category + ',' + transaction?.category_id || ''
+            }
+          >
+            {categories.map((category) => (
+              <option
+                key={category.category_id}
+                value={category.category_name + ',' + category.category_id}
+              >
+                {category.category_name}
+              </option>
+            ))}
+          </select>
         </td>
         <td>
           <input
@@ -108,6 +100,10 @@ const TransactionForm = ({
             placeholder="amount"
             required
             defaultValue={transaction?.amount || ''}
+            pattern="^-?[0-9]*$"
+            onInput={(e) => {
+              e.target.value = e.target.value.replace(/(?!^-)[^0-9]/g, '');
+            }}
           />
         </td>
       </tr>

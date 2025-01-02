@@ -1,14 +1,21 @@
 import pool from '../pool.js';
 
-export const getCategories = async () => {
+export const getCategoriesByUserId = async (user_id) => {
   try {
     const { rows } = await pool.query(
       `  
         SELECT *   
         FROM categories   
-        ORDER BY created_at ASC   
+        WHERE user_id = $1   
+
+        UNION   
+
+        SELECT *   
+        FROM categories   
+        WHERE category_name = 'Ready to Assign'   
+        ORDER BY created_at ASC;   
         `,
-      [],
+      [user_id],
     );
     return rows;
   } catch (error) {
