@@ -18,7 +18,6 @@ const DonutChart = ({ data, totalSpendings = 0 }) => {
     return `rgb(${blendWithWhite(r)}, ${blendWithWhite(g)}, ${blendWithWhite(b)})`;
   };
 
-  // Default data to show a single 100% grey slice if data is falsy
   const chartData = data?.length
     ? data
     : [{ x: 'No Data', y: 100, color: '#d3d3d3' }];
@@ -30,24 +29,25 @@ const DonutChart = ({ data, totalSpendings = 0 }) => {
         width={400}
         height={400}
         data={chartData}
-        innerRadius={80}
-        labelRadius={150}
+        innerRadius={70}
+        labelRadius={120}
+        labels={({ datum }) => (datum.y >= 7 ? datum.x : null)}
         theme={VictoryTheme.clean}
         radius={({ datum }) =>
           hoveredSlice && hoveredSlice.category_name === datum.category_name
-            ? 140
-            : 130
-        } // Increase radius on hover
+            ? 115
+            : 110
+        }
         events={[
           {
             target: 'data',
             eventHandlers: {
               onMouseOver: (event, props) => {
-                setHoveredSlice(props.datum); // Set the hovered slice datum
+                setHoveredSlice(props.datum);
                 return [{ mutation: () => ({ active: true }) }];
               },
               onMouseOut: () => {
-                setHoveredSlice(null); // Reset on mouse out
+                setHoveredSlice(null);
                 return [{ mutation: () => ({ active: false }) }];
               },
             },
@@ -58,8 +58,8 @@ const DonutChart = ({ data, totalSpendings = 0 }) => {
             fill: ({ datum }) =>
               hoveredSlice === null ||
               hoveredSlice.category_name === datum.category_name
-                ? datum.color // Use original color if no slice is hovered or slice is hovered
-                : lightColor(datum.color), // Otherwise, use dull color
+                ? datum.color
+                : lightColor(datum.color),
             stroke: '#fff',
             strokeWidth: 3,
           },
@@ -76,22 +76,13 @@ const DonutChart = ({ data, totalSpendings = 0 }) => {
             height: '100%',
           }}
         >
-          {/* "spendingsByCategories": [
-        {
-            "x": "Category 2\n87878 $\n99%",
-            "y": "99",
-            "color": "#f950ae",
-            "category_name": "Category 2",
-            "amount": "87878",
-            "percent": "99"
-        },
-        
-    ], */}
           <span
             className={styles.spendingBreakdownContentLabel}
             style={{ fontSize: '10px', textAlign: 'center' }}
           >
-            {hoveredSlice ? hoveredSlice.category_name : 'Total Spending'}
+            {data?.length && hoveredSlice
+              ? hoveredSlice.category_name
+              : 'Total Spending'}
           </span>
           <span
             className={styles.spendingBreakdownContentSpendingNum}
@@ -100,20 +91,22 @@ const DonutChart = ({ data, totalSpendings = 0 }) => {
               textAlign: 'center',
             }}
           >
-            {hoveredSlice
+            {data?.length && hoveredSlice
               ? hoveredSlice.amount
               : totalSpendings
                 ? totalSpendings
                 : 0}
             $
           </span>
-          {hoveredSlice && (
+          {data?.length && hoveredSlice ? (
             <span
               className={styles.spendingBreakdownContentLabel}
               style={{ fontSize: '10px', textAlign: 'center' }}
             >
               {hoveredSlice.percent} %
             </span>
+          ) : (
+            ''
           )}
         </div>
       </foreignObject>

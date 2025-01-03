@@ -3,7 +3,7 @@ import { useLoaderData, useOutletContext, Form } from 'react-router-dom';
 import AddIcon from './AddIcon';
 import DeleteIcon from './DeleteIcon';
 import { useState, useEffect } from 'react';
-import TransactionForm from './TransactionForm'; // Import the new form component
+import TransactionForm from './TransactionForm'; 
 
 function Transactions() {
   const { accounts, categories } = useOutletContext();
@@ -58,7 +58,6 @@ function Transactions() {
     }
   };
 
-  // Move handleAddFormOpen outside of handleRowClick
   const handleAddFormOpen = () => {
     setIsAddTransactionFormOpen(true);
     setSelectedTransactions([]);
@@ -187,7 +186,7 @@ function Transactions() {
                   <td>{transaction.payee}</td>
                   <td>{transaction.category}</td>
                   <td>{transaction.memo || '-'}</td>
-                  <td>{transaction.amount}</td>
+                  <td>{transaction.amount} $</td>
                 </tr>
               ),
             )}

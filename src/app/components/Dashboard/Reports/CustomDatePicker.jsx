@@ -1,24 +1,35 @@
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import styles from './Reports.module.css';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
-function CustomDatePicker({ label, defaultValue = '', fieldName }) {
+function CustomDatePicker({ label, value = '', fieldName }) {
   return (
-    <FormControl
-      
-      sx={{ m: 0, width: 150, backgroundColor: 'white' }}
-    >
+    <FormControl sx={{ m: 0, width: 150, backgroundColor: 'white' }}>
       <DatePicker
         id={styles.datePicker}
         label={label}
-        defaultValue={dayjs(defaultValue)}
+        value={dayjs(value)}
         format="YYYY-MM"
         name={fieldName}
         slots={{ textField: TextField }}
         views={['year', 'month']}
         slotProps={{
+          popper: {
+            sx: {
+              '.MuiPaper-root': {
+                border: '1px solid blue',
+                borderRadius: '10px',
+              },
+              '.MuiPickersCalendarHeader-root':{
+                minHeight:'auto',
+                maxHeight:'max-content',
+              },
+              '.MuiPickersYear-yearButton, .MuiPickersMonth-monthButton':{
+                height:'auto'
+              }
+            },
+          },
           textField: {
             size: 'small',
             sx: {

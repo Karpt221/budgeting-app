@@ -19,8 +19,6 @@ import {
 } from './actions.js';
 import { loadTransactions, getMinMaxDate } from './loaders.js';
 
-
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -140,37 +138,33 @@ const router = createBrowserRouter([
                     const categoriesResponse = await apiService.getCategorie(
                       params.user_id,
                     );
-                    console.log(transactions,accountsResponse.accounts,categoriesResponse.categories);
-                    const {minDate, maxDate} = getMinMaxDate(transactions);
-                    const categories_ids = categoriesResponse.categories.map((category)=>{
-                      return category.category_id;
-                    });
-                    const accounts_ids = accountsResponse.accounts.map((account)=>{
-                      return account.account_id;
-                    });
+                    const { minDate, maxDate } = getMinMaxDate(transactions);
+                    const categories_ids = categoriesResponse.categories.map(
+                      (category) => {
+                        return category.category_id;
+                      },
+                    );
+                    const accounts_ids = accountsResponse.accounts.map(
+                      (account) => {
+                        return account.account_id;
+                      },
+                    );
                     const initialData =
                       await apiService.getSpendingsByCategories({
                         startDate: minDate,
                         endDate: maxDate,
-                        categories: categories_ids, 
-                        accounts: accounts_ids, 
+                        categories: categories_ids,
+                        accounts: accounts_ids,
                       });
-                    return initialData.spendingsBreakdown; 
-                  } catch (error) {
-                    throw new Error(error);
-                  }
-                },
-                action: async ({ request }) => {
-                  try {
-                    const formData = await request.formData();
-                    const spendingBreakdownResponse =
-                      await apiService.getSpendingsByCategories({
-                        startDate: formData.get('startDate'),
-                        endDate: formData.get('endDate'),
-                        categories: formData.get('categories').split(','),
-                        accounts: formData.get('accounts').split(','),
-                      });
-                    return spendingBreakdownResponse.spendingsBreakdown;
+                    return {
+                      spendingsBreakdown: initialData.spendingsBreakdown,
+                      transactions,
+                      accounts: accountsResponse.accounts,
+                      categories: categoriesResponse.categories.filter(
+                        (category) =>
+                          category.category_name !== 'Ready to Assign',
+                      ),
+                    };
                   } catch (error) {
                     throw new Error(error);
                   }
