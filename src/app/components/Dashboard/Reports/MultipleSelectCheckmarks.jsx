@@ -36,8 +36,8 @@ export default function MultipleSelectCheckmarks({
   const [selectedValues, setSelectedValues] = useState([]);  
 
   useEffect(() => {  
-    // Use actionSelectedValues if available, otherwise fallback to options  
-    if (actionSelectedValues && actionSelectedValues.length > 0) {  
+
+    if (actionSelectedValues.length !== 0) {  
       setSelectedValues(actionSelectedValues);  
     } else {  
       setSelectedValues(options.map((option) => option.id));  
@@ -50,7 +50,7 @@ export default function MultipleSelectCheckmarks({
     } = event;  
     const newSelectedValues = typeof value === 'string' ? value.split(',') : value;  
     setSelectedValues(newSelectedValues);  
-    onChange(newSelectedValues); // Call the onChange prop to update the parent state  
+    onChange(newSelectedValues); 
   };  
 
   const renderValue = () => {  

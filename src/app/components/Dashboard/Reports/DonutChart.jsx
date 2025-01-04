@@ -29,14 +29,14 @@ const DonutChart = ({ data, totalSpendings = 0 }) => {
         width={400}
         height={400}
         data={chartData}
-        innerRadius={70}
-        labelRadius={120}
+        innerRadius={60}
+        labelRadius={140}
         labels={({ datum }) => (datum.y >= 7 ? datum.x : null)}
         theme={VictoryTheme.clean}
         radius={({ datum }) =>
           hoveredSlice && hoveredSlice.category_name === datum.category_name
-            ? 115
-            : 110
+            ? 120
+            : 115
         }
         events={[
           {

@@ -1,20 +1,76 @@
-POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/reports/spending-breakdown HTTP/1.1  
+POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/reports/spending-trends HTTP/1.1  
 content-Type: application/json  
 
 {
-    "startDate": "2024-12",
+    "startDate": "2024-11",
     "endDate": "2025-02",
     "categories": [
-        "b3ebfb19-ff71-4410-9586-f792a9a98b91",
-        "1f695803-f553-4b84-bb8f-8017a3cfca6e",
-        "401771a6-6ea6-4468-891a-b6ff4784ffab",
-        "7f26a33c-5c93-45a6-a1a1-f69947389b15"
+        "980bb4f6-4277-4b86-8124-0931118172dc",
+        "036c754a-712e-4d79-9ab0-355e2ea9ce55",
+        "612b1b35-2bab-4e2e-a18f-41a8cc0fc634",
+        "9f51801c-fe54-4fd3-9f66-b9d34a6935da"
     ],
     "accounts": [
         "dcd70c3e-4546-4714-9e96-0ecf601e227b",
-        "95d93c43-f7fd-4d5c-ab3b-84072beeaa95"
+        "7842d695-65d8-4777-844b-4c8d7a15fcd1"
     ]
 }
+
+
+# {
+#   "message": "Spending trends fetched!",
+#   "spendinTrends": {
+#     "spendingsBreakdownByMonth": [
+#       {
+#         "month": "2024-11",
+#         "categories": [
+#           {
+#             "name": "Rent",
+#             "amount": "866",
+#             "percent": "100",
+#             "color": "#30b004"
+#           }
+#         ]
+#       },
+#       {
+#         "month": "2025-01",
+#         "categories": [
+#           {
+#             "name": "Groceries",
+#             "amount": "922",
+#             "percent": "42",
+#             "color": "#11ae75"
+#           },
+#           {
+#             "name": "Rent",
+#             "amount": "646",
+#             "percent": "30",
+#             "color": "#30b004"
+#           },
+#           {
+#             "name": "Medical Treatment",
+#             "amount": "577",
+#             "percent": "26",
+#             "color": "#512c78"
+#           }
+#         ]
+#       },
+#       {
+#         "month": "2025-02",
+#         "categories": [
+#           {
+#             "name": "Medical Treatment",
+#             "amount": "575",
+#             "percent": "100",
+#             "color": "#512c78"
+#           }
+#         ]
+#       }
+#     ],
+#     "totalSpending": "3586",
+#     "averageMonthlySpending": 1195
+#   }
+# }
 
 # "spendingsBreakdown": {
 #     "spendingsByCategories": [

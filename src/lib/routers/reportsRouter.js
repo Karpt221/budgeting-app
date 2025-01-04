@@ -4,13 +4,10 @@ import passport from '../middlewares/passport.js';
 import {
   getUserSpendingsByCategory,
   getUserSpendingStats,
+  getUserSpendingsByCategoriesForAccounts,
 } from '../db/reportsQueries.js';
 
 const router = Router();
-// const getRandomColor = () => {
-//   const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-//   return `#${randomColor.padStart(6, '0')}`; // Ensure it's always 6 digits
-// };
 
 router.post(
   '/spending-breakdown',
@@ -20,12 +17,8 @@ router.post(
       const filters = req.body;
       const spendingsByCategories = await getUserSpendingsByCategory(filters);
       const spendingStats = await getUserSpendingStats(filters);
-      if (!spendingsByCategories) {
-        return res.status(404).json({ message: 'No spendings found.' });
-      }
 
       const transformedSpendings = spendingsByCategories.map((category) => {
-
         return {
           x: `${category.category_name}\n${category.total_spending} $\n${category.percent}%`,
           y: Number.parseInt(category.percent),
@@ -43,7 +36,44 @@ router.post(
           spendingStats,
         },
       });
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching spendings', error });
+    }
+  },
+);
 
+router.post(
+  '/spending-trends',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    try {
+      const filters = req.body;
+      console.log('filters:', filters);
+      if ((filters.categories.length === 1 && filters.categories[0] === '') || (filters.accounts.length === 1 && filters.accounts[0] === '')) {
+        res.json({
+          message: 'Spending trends fetched!',
+          spendinTrends: {
+            spendingsBreakdownByMonth: [],
+            totalSpending: 0,
+            averageMonthlySpending: 0,
+          },
+        });
+      } else {
+        const {
+          spendingsBreakdownByMonth,
+          totalSpending,
+          averageMonthlySpending,
+        } = await getUserSpendingsByCategoriesForAccounts(filters);
+
+        res.json({
+          message: 'Spending trends fetched!',
+          spendinTrends: {
+            spendingsBreakdownByMonth,
+            totalSpending,
+            averageMonthlySpending,
+          },
+        });
+      }
     } catch (error) {
       res.status(500).json({ message: 'Error fetching spendings', error });
     }

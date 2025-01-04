@@ -52,10 +52,8 @@ const router = createBrowserRouter([
           const password = formData.get('password');
           try {
             const { token } = await apiService.signIn(email, password);
-            console.log(token);
             localStorage.setItem('budgeting-user-token', token);
             const user = await apiService.decodeToken(token);
-            console.log(user);
             return redirect(`/${user.user_id}/dashboard/transactions`);
           } catch (error) {
             if (error.code === 403) {
@@ -90,8 +88,7 @@ const router = createBrowserRouter([
           try {
             const userAccounts = await apiService.getAccounts(params.user_id);
             const user = await apiService.getUserByID(params.user_id);
-            console.log(params.user_id);
-            const categoriesResponse = await apiService.getCategorie(
+            const categoriesResponse = await apiService.getCategories(
               params.user_id,
             );
 
@@ -113,15 +110,33 @@ const router = createBrowserRouter([
           {
             path: 'budget',
             element: <Budget />,
+            loader: async ({ params }) => {
+              return {
+                transactions: await loadTransactions(
+                  async () => await apiService.getTransactions(params.user_id),
+                ),
+                account_id: null,
+              };
+            },
+            action: async ({ request }) => {
+              const formData = await request.formData();
+              const action = formData.get('action');
+              try {
+                if (action === 'edit') {
+                  await handleEditTransaction(formData);
+                } else if (action === 'delete') {
+                  await handleDeleteTransaction(formData);
+                } else if (action === 'create') {
+                  await handleCreateTransaction(formData);
+                }
+              } catch (error) {
+                throw new Error(error);
+              }
+            },
           },
           {
             path: 'reports',
             element: <Reports />,
-            loader: async ({ params }) => {
-              return await loadTransactions(
-                async () => await apiService.getTransactions(params.user_id),
-              );
-            },
             children: [
               {
                 path: 'spending-breakdown',
@@ -135,7 +150,7 @@ const router = createBrowserRouter([
                     const accountsResponse = await apiService.getAccounts(
                       params.user_id,
                     );
-                    const categoriesResponse = await apiService.getCategorie(
+                    const categoriesResponse = await apiService.getCategories(
                       params.user_id,
                     );
                     const { minDate, maxDate } = getMinMaxDate(transactions);
@@ -173,15 +188,48 @@ const router = createBrowserRouter([
               {
                 path: 'spending-trends',
                 element: <SpendingTrends />,
-                action: async ({ request }) => {
-                  const formData = await request.formData();
-
-                  return {
-                    startDate: formData.get('startDate'),
-                    endDate: formData.get('endDate'),
-                    categories: formData.get('categories').split(','),
-                    accounts: formData.get('accounts').split(','),
-                  };
+                loader: async ({ params }) => {
+                  try {
+                    const transactions = await loadTransactions(
+                      async () =>
+                        await apiService.getTransactions(params.user_id),
+                    );
+                    const accountsResponse = await apiService.getAccounts(
+                      params.user_id,
+                    );
+                    const categoriesResponse = await apiService.getCategories(
+                      params.user_id,
+                    );
+                    const { minDate, maxDate } = getMinMaxDate(transactions);
+                    const categories_ids = categoriesResponse.categories.map(
+                      (category) => {
+                        return category.category_id;
+                      },
+                    );
+                    const accounts_ids = accountsResponse.accounts.map(
+                      (account) => {
+                        return account.account_id;
+                      },
+                    );
+                    const initialData =
+                      await apiService.getSpendingTrends({
+                        startDate: minDate,
+                        endDate: maxDate,
+                        categories: categories_ids,
+                        accounts: accounts_ids,
+                      });
+                    return {
+                      spendinTrends: initialData.spendinTrends,
+                      transactions,
+                      accounts: accountsResponse.accounts,
+                      categories: categoriesResponse.categories.filter(
+                        (category) =>
+                          category.category_name !== 'Ready to Assign',
+                      ),
+                    };
+                  } catch (error) {
+                    throw new Error(error);
+                  }
                 },
               },
             ],
@@ -190,7 +238,6 @@ const router = createBrowserRouter([
             path: 'transactions',
             element: <Transactions />,
             loader: async ({ params }) => {
-              console.log(params.user_id);
               return {
                 transactions: await loadTransactions(
                   async () => await apiService.getTransactions(params.user_id),

@@ -118,7 +118,7 @@ class ApiService {
   }
 
   // Categories methods
-  async getCategorie(userId) {
+  async getCategories(userId) {
     return this.fetchData(`/${userId}/categories`);
   }
 
@@ -146,6 +146,13 @@ class ApiService {
 
   async getSpendingsByCategories(filters) {
     return this.fetchData(`/users/reports/spending-breakdown`, {
+      method: 'POST',
+      body: JSON.stringify(filters),
+    });
+  }
+
+  async getSpendingTrends(filters) {
+    return this.fetchData(`/users/reports/spending-trends`, {
       method: 'POST',
       body: JSON.stringify(filters),
     });

@@ -1,54 +1,90 @@
 import styles from './Reports.module.css';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import MultipleSelectCheckmarks from './MultipleSelectCheckmarks';
 import CustomDatePicker from './CustomDatePicker';
-import { Form, useActionData, useOutletContext } from 'react-router-dom';
+import { Form, useLoaderData } from 'react-router-dom';
+import apiService from '../../../ApiService.js';
+import StackedBarPlot from './StackedBarPlot.jsx';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 function SpendingTrends() {
-  const actionData = useActionData();
-  const { accounts, categories, transactions } = useOutletContext();
-  console.log(actionData);
-  const { minDate, maxDate } = useMemo(() => {
-    if (!transactions || transactions.length === 0) {
-      return { minDate: null, maxDate: null };
+  const { spendinTrends, transactions, accounts, categories } = useLoaderData();
+  const [actionSpendinTrends, setActionSpendinTrends] = useState(null);
+  const [actionAccounts, setActionAccounts] = useState([]);
+  const [actionCategories, setActionCategories] = useState([]);
+  const [minDate, setMinDate] = useState(null);
+  const [maxDate, setMaxDate] = useState(null);
+  console.log('spendinTrends', spendinTrends);
+  console.log('actionSpendinTrends', actionSpendinTrends);
+  async function handleFiltersSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    setActionAccounts(formData.get('accounts').split(','));
+    setActionCategories(formData.get('categories').split(','));
+    setMinDate(formData.get('startDate'));
+    setMaxDate(formData.get('endDate'));
+
+    async function fetchSpendingTrends() {
+      try {
+        const spendinTrendsResponse = await apiService.getSpendingTrends({
+          startDate: formData.get('startDate'),
+          endDate: formData.get('endDate'),
+          categories: formData.get('categories').split(','),
+          accounts: formData.get('accounts').split(','),
+        });
+        return spendinTrendsResponse.spendinTrends;
+      } catch (error) {
+        throw new Error(error);
+      }
     }
-    const transactionDates = transactions.map((tx) =>
-      dayjs.utc(tx.transaction_date),
-    );
-    const minDate = transactionDates.reduce(
-      (min, date) => (date.isBefore(min) ? date : min),
-      transactionDates[0],
-    );
-    const maxDate = transactionDates.reduce(
-      (max, date) => (date.isAfter(max) ? date : max),
-      transactionDates[0],
-    );
-    return {
-      minDate: minDate.format('YYYY-MM-DD'), // Format to YYYY-MM-DD
-      maxDate: maxDate.format('YYYY-MM-DD'), // Format to YYYY-MM-DD
-    };
-  }, [transactions]);
+
+    setActionSpendinTrends(await fetchSpendingTrends());
+  }
+
+  const totalSpendings = accounts.reduce((total, account) => {
+    return total + Math.abs(account.balance);
+  }, 0);
+
+  const { minDate: calculatedMinDate, maxDate: calculatedMaxDate } =
+    useMemo(() => {
+      if (!transactions || transactions.length === 0) {
+        return { minDate: null, maxDate: null };
+      }
+      const transactionDates = transactions.map((tx) =>
+        dayjs.utc(tx.transaction_date),
+      );
+      const minDate = transactionDates.reduce(
+        (min, date) => (date.isBefore(min) ? date : min),
+        transactionDates[0],
+      );
+      const maxDate = transactionDates.reduce(
+        (max, date) => (date.isAfter(max) ? date : max),
+        transactionDates[0],
+      );
+      return {
+        minDate: minDate.format('YYYY-MM'),
+        maxDate: maxDate.format('YYYY-MM'),
+      };
+    }, [transactions]);
 
   return (
     <div className={styles.spendingBreakdownMain}>
       <div className={styles.spendingBreakdownHeaderWrapper}>
-        <h2 className={styles.spendingBreakdownMainHeader}>
-          Spending Trends
-        </h2>
+        <h2 className={styles.spendingBreakdownMainHeader}>Spending Trends</h2>
         <div className={styles.spendingBreakdownFilters}>
-          <Form method="post" action="">
+          <Form onSubmit={handleFiltersSubmit} method="post" action="">
             <CustomDatePicker
               label="Start Date"
               fieldName="startDate"
-              defaultValue={minDate}
+              value={minDate || calculatedMinDate}
             />
             <CustomDatePicker
               label="End Date"
               fieldName="endDate"
-              defaultValue={maxDate}
+              value={maxDate || calculatedMaxDate}
             />
             <MultipleSelectCheckmarks
               fieldName="categories"
@@ -57,6 +93,8 @@ function SpendingTrends() {
                 id: item.category_id,
                 value: item.category_name,
               }))}
+              actionSelectedValues={actionCategories}
+              onChange={setActionCategories}
             />
             <MultipleSelectCheckmarks
               fieldName="accounts"
@@ -65,6 +103,8 @@ function SpendingTrends() {
                 id: item.account_id,
                 value: item.account_name,
               }))}
+              actionSelectedValues={actionAccounts}
+              onChange={setActionAccounts}
             />
             <button className={styles.SumbitBtn} type="submit">
               Apply
@@ -73,17 +113,52 @@ function SpendingTrends() {
         </div>
       </div>
       <div className={styles.spendingTrendsContent}>
-        
-          <div className={styles.spendingBreakdownContentChart}>
-            Content Chart
+        <div className={styles.spendingBreakdownContentChart}>
+          <div className={styles.spendingTrendsContentChartHeader}>
+            <div
+              className={
+                styles.spendingTrendsContentChartHeaderMonthlyContainer
+              }
+            >
+              <span className={styles.spendingBreakdownContentLabel}>
+                Average Monthly Spending
+              </span>
+              <span>
+                {actionSpendinTrends
+                  ? actionSpendinTrends.averageMonthlySpending
+                  : spendinTrends.averageMonthlySpending} $
+              </span>
+            </div>
+            <div
+              className={
+                styles.spendingTrendsContentChartHeaderTotalContainer
+              }
+            >
+              <span className={styles.spendingBreakdownContentLabel}>
+                Total Spending
+              </span>
+              <span>
+                {actionSpendinTrends
+                  ? actionSpendinTrends.totalSpending
+                  : spendinTrends.totalSpending} $
+              </span>
+            </div>
           </div>
-          <div className={styles.spendingBreakdownContentMetrics}>
+          <StackedBarPlot
+            data={
+              actionSpendinTrends
+                ? actionSpendinTrends.spendingsBreakdownByMonth
+                : spendinTrends.spendingsBreakdownByMonth
+            }
+          />
+        </div>
+        {/* <div className={styles.spendingBreakdownContentMetrics}>
             Content Transactions
             
-        </div>
+        </div> */}
       </div>
     </div>
-    );
+  );
 }
 
 export default SpendingTrends;
