@@ -40,7 +40,7 @@ categoriesRouter.get(
       console.log(ready_to_assign);
       res.json({
         message: 'Fetched ready_to_assign successfully',
-        ready_to_assign: ready_to_assign
+        ready_to_assign: ready_to_assign,
       });
     } catch (err) {
       next(err);
@@ -78,7 +78,18 @@ categoriesRouter.post(
         category: newCategory,
       });
     } catch (err) {
-      next(err);
+      if (
+        err.message.includes(
+          'duplicate key value violates unique constraint "unique_user_category"',
+        )
+      ) {
+        res.status(409).json({
+          code: 409,
+          message: 'Category with this name already exist!',
+        });
+      } else {
+        next(err);
+      }
     }
   },
 );
@@ -96,7 +107,18 @@ categoriesRouter.put(
         category: updatedCategory,
       });
     } catch (err) {
-      next(err);
+      if (
+        err.message.includes(
+          'duplicate key value violates unique constraint "unique_user_category"',
+        )
+      ) {
+        res.status(409).json({
+          code: 409,
+          message: 'Category with this name already exist!',
+        });
+      } else {
+        next(err);
+      }
     }
   },
 );

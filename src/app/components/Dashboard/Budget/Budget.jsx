@@ -1,5 +1,5 @@
 import styles from './Budget.module.css';
-import { useLoaderData, Form } from 'react-router-dom';
+import { useLoaderData, Form, useLocation } from 'react-router-dom';
 import AddIcon from './AddIcon';
 import DeleteIcon from './DeleteIcon';
 import { useState, useEffect } from 'react';
@@ -11,8 +11,18 @@ function Budget() {
   const [isAddCategoryFormOpen, setIsAddCategoryFormOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const readyToAssign = categoriesData.readyToAssign;
+  const [errorMessage, setErrorMessage] = useState(null);
+  const location = useLocation();
+  console.log('categoriesData.readyToAssign', categoriesData.readyToAssign);
+  console.log('errorMessage', errorMessage);
 
-  console.log('categoriesData.readyToAssign',categoriesData.readyToAssign);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    console.log('params.get(errorMessage)', params.get('errorMessage'));
+    if (params.get('categoryError') === 'true') {
+      setErrorMessage(params.get('errorMessage'));
+    }
+  }, [location]);
 
   useEffect(() => {
     setIsAddCategoryFormOpen(false);
@@ -37,6 +47,7 @@ function Budget() {
   const handleRowClick = (category) => {
     if (selectedCategories.includes(category.category_id)) {
       setEditingCategory(category);
+      setIsAddCategoryFormOpen(false);
     } else {
       setSelectedCategories([category.category_id]);
       setEditingCategory(null);
@@ -111,8 +122,12 @@ function Budget() {
           <tbody>
             {isAddCategoryFormOpen && (
               <CategoryForm
+                errorMessage={errorMessage}
                 action="create"
-                onCancel={() => setIsAddCategoryFormOpen(false)}
+                onCancel={() => {
+                  setErrorMessage(null);
+                  setIsAddCategoryFormOpen(false);
+                }}
               />
             )}
             {categoriesData.categories.map((category) =>
@@ -121,7 +136,11 @@ function Budget() {
                 <CategoryForm
                   key={category.category_id}
                   action="edit"
-                  onCancel={() => setEditingCategory(null)}
+                  errorMessage={errorMessage}
+                  onCancel={() => {
+                    setErrorMessage(null);
+                    setEditingCategory(null);
+                  }}
                   category={editingCategory}
                 />
               ) : (

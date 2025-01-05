@@ -125,8 +125,8 @@ const router = createBrowserRouter([
               };
             },
             action: async ({ request, params }) => {
+              const formData = await request.formData();
               try {
-                const formData = await request.formData();
                 const action = formData.get('action');
                 if (action === 'edit') {
                   await apiService.updateCategory(
@@ -155,7 +155,13 @@ const router = createBrowserRouter([
                   readyToAssign: readyToAssignResponese.ready_to_assign,
                 };
               } catch (error) {
-                throw new Error(error);
+                if (error.code === 409) {
+                  return redirect(
+                    `/${params.user_id}/dashboard/budget?categoryError=true&errorMessage=${error.message}`,
+                  );
+                } else {
+                  throw new Error(error);
+                }
               }
             },
           },
@@ -335,7 +341,7 @@ const router = createBrowserRouter([
                 console.log(error);
                 if (error.code === 409) {
                   return redirect(
-                    `${formData.get('previousLocation')}?accountError=true&erorrMessage=${error.message}`,
+                    `${formData.get('previousLocation')}?accountError=true&errorMessage=${error.message}`,
                   );
                 } else {
                   throw new Error(error);

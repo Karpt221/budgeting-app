@@ -1,7 +1,13 @@
 import styles from './Budget.module.css';
 import PropTypes from 'prop-types';
 
-const CategoryForm = ({ action, onCancel, category }) => {
+const CategoryForm = ({errorMessage, action, onCancel, category }) => {
+
+  function checkError(event) {
+    if(errorMessage){
+      event.preventDefault();
+    }
+  }
   return (
     <>
       <tr className={styles.addRow}>
@@ -56,9 +62,11 @@ const CategoryForm = ({ action, onCancel, category }) => {
             value={action}
             className={styles.saveButton}
             type="submit"
+            onClick={checkError}
           >
             Save
           </button>
+          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         </td>
         <td colSpan="3"></td>
       </tr>

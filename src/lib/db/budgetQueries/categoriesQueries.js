@@ -125,7 +125,7 @@ export const deleteCategories = async (categoryIds) => {
     }
 
     await updateReadyToAssign(userId);
-    await updateAvailableForCategories(categoryIds);
+    //await updateAvailableForCategories(categoryIds);
 
     return rows;
   } catch (error) {

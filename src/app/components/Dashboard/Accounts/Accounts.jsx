@@ -24,7 +24,7 @@ function Accounts({ user_id, accounts }) {
       setIsAddAccountModalOpen(false);
       setErrorMessage(null);
     } else if (params.get('accountError') === 'true') {
-      setErrorMessage(params.get('erorrMessage'));
+      setErrorMessage(params.get('errorMessage'));
     }
   }, [location]);
 
