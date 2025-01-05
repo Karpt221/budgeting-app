@@ -1,20 +1,43 @@
-POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/reports/spending-trends HTTP/1.1  
-content-Type: application/json  
+GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/categories/ready-to-assign HTTP/1.1
 
-{
-    "startDate": "2024-11",
-    "endDate": "2025-02",
-    "categories": [
-        "980bb4f6-4277-4b86-8124-0931118172dc",
-        "036c754a-712e-4d79-9ab0-355e2ea9ce55",
-        "612b1b35-2bab-4e2e-a18f-41a8cc0fc634",
-        "9f51801c-fe54-4fd3-9f66-b9d34a6935da"
-    ],
-    "accounts": [
-        "dcd70c3e-4546-4714-9e96-0ecf601e227b",
-        "7842d695-65d8-4777-844b-4c8d7a15fcd1"
-    ]
-}
+//GET http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/transactions/ HTTP/1.1
+# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/accounts/ HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "hhh",
+#     "balance": "999"
+# }
+
+# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/transactions/508f9be0-7619-41ed-a118-baf19ce46424 HTTP/1.1
+# content-type: application/json
+
+# {
+#     "transaction_date": "2024-12-10",
+#     "payee": "SHOP",
+#     "category_id": "baa63746-790f-43a7-8529-4c39e860b8b5",
+#     "memo": "fsrg",
+#     "amount": "999"
+# }
+
+
+# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/reports/spending-trends HTTP/1.1  
+# content-Type: application/json  
+
+# {
+#     "startDate": "2024-11",
+#     "endDate": "2025-02",
+#     "categories": [
+#         "980bb4f6-4277-4b86-8124-0931118172dc",
+#         "036c754a-712e-4d79-9ab0-355e2ea9ce55",
+#         "612b1b35-2bab-4e2e-a18f-41a8cc0fc634",
+#         "9f51801c-fe54-4fd3-9f66-b9d34a6935da"
+#     ],
+#     "accounts": [
+#         "dcd70c3e-4546-4714-9e96-0ecf601e227b",
+#         "7842d695-65d8-4777-844b-4c8d7a15fcd1"
+#     ]
+# }
 
 
 # {

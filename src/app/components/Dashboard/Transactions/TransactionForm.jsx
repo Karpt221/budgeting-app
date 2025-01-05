@@ -35,7 +35,6 @@ const TransactionForm = ({
             >
               {accounts.map((account) => (
                 <option
-                  selected
                   key={account.account_id}
                   value={account.account_id}
                 >
@@ -66,18 +65,13 @@ const TransactionForm = ({
         </td>
         <td>
           <select
-            name="category"
+            name="category_id"
             id="category"
             required
-            defaultValue={
-              transaction?.category + ',' + transaction?.category_id || ''
-            }
+            defaultValue={transaction?.category_id || ''}
           >
             {categories.map((category) => (
-              <option
-                key={category.category_id}
-                value={category.category_name + ',' + category.category_id}
-              >
+              <option key={category.category_id} value={category.category_id}>
                 {category.category_name}
               </option>
             ))}

@@ -61,6 +61,7 @@ function Transactions() {
   const handleAddFormOpen = () => {
     setIsAddTransactionFormOpen(true);
     setSelectedTransactions([]);
+    setEditingTransaction(null);
   };
 
   return (

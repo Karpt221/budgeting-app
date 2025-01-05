@@ -1,91 +1,81 @@
-import styles from './Transactions.module.css';
-import { useLoaderData, useOutletContext, Form } from 'react-router-dom';
+import styles from './Budget.module.css';
+import { useLoaderData, Form } from 'react-router-dom';
 import AddIcon from './AddIcon';
 import DeleteIcon from './DeleteIcon';
 import { useState, useEffect } from 'react';
-import TransactionForm from './TransactionForm'; 
+import CategoryForm from './CategoryForm';
 
 function Budget() {
-  const { accounts, categories } = useOutletContext();
-  const transactionsData = useLoaderData();
-  const [currentAccount, setCurrentAccount] = useState(null);
-  const [selectedTransactions, setSelectedTransactions] = useState([]);
-  const [isAddTransactionFormOpen, setIsAddTransactionFormOpen] =
-    useState(false);
-  const [editingTransaction, setEditingTransaction] = useState(null);
-  console.log(transactionsData);
-  useEffect(() => {
-    if (transactionsData.account_id !== null) {
-      const account = accounts.find(
-        (account) => account.account_id === transactionsData.account_id,
-      );
-      setCurrentAccount(account);
-    } else {
-      setCurrentAccount(null);
-    }
-    setIsAddTransactionFormOpen(false);
-    setEditingTransaction(null);
-  }, [transactionsData, accounts]);
+  const categoriesData = useLoaderData();
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [isAddCategoryFormOpen, setIsAddCategoryFormOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const readyToAssign = categoriesData.readyToAssign;
+
+  console.log('categoriesData.readyToAssign',categoriesData.readyToAssign);
 
   useEffect(() => {
-    setSelectedTransactions([]);
-    setIsAddTransactionFormOpen(false);
-  }, [currentAccount]);
+    setIsAddCategoryFormOpen(false);
+    setEditingCategory(null);
+  }, [categoriesData]);
 
   const handleSelectAll = (event) => {
     const checked = event.target.checked;
-    setSelectedTransactions(
-      checked ? transactionsData.transactions.map((t) => t.transaction_id) : [],
+    setSelectedCategories(
+      checked ? categoriesData.categories.map((c) => c.category_id) : [],
     );
   };
 
-  const handleSelectTransaction = (transactionId) => {
-    setSelectedTransactions((prevSelected) => {
-      if (prevSelected.includes(transactionId)) {
-        return prevSelected.filter((id) => id !== transactionId); // Deselect
-      } else {
-        return [...prevSelected, transactionId]; // Select
-      }
-    });
+  const handleSelectCategory = (categoryId) => {
+    setSelectedCategories((prevSelected) =>
+      prevSelected.includes(categoryId)
+        ? prevSelected.filter((id) => id !== categoryId)
+        : [...prevSelected, categoryId],
+    );
   };
 
-  const handleRowClick = (transaction) => {
-    if (selectedTransactions.includes(transaction.transaction_id)) {
-      setEditingTransaction(transaction);
+  const handleRowClick = (category) => {
+    if (selectedCategories.includes(category.category_id)) {
+      setEditingCategory(category);
     } else {
-      setSelectedTransactions([transaction.transaction_id]);
-      setEditingTransaction(null);
+      setSelectedCategories([category.category_id]);
+      setEditingCategory(null);
     }
   };
 
   const handleAddFormOpen = () => {
-    setIsAddTransactionFormOpen(true);
-    setSelectedTransactions([]);
+    setIsAddCategoryFormOpen(true);
+    setSelectedCategories([]);
+    setEditingCategory(null);
   };
 
   return (
     <>
-      <div className={styles.transactionsTitle}>
-        <h2>{currentAccount ? currentAccount.account_name : 'All Accounts'}</h2>
+      <div className={styles.categoriesTitle}>
+        <div className={styles.categoriesTitleReadyToAssignContainer}>
+          <span className={styles.categoriesTitleReadyToAssignAmount}>
+            {readyToAssign} $
+          </span>
+          <span className={styles.categoriesTitleReadyToAssignText}>
+            Ready to Assign
+          </span>
+        </div>
       </div>
       <hr />
-      <div className={styles.transactionsToolbar}>
+      <div className={styles.categoriesToolbar}>
         <button onClick={handleAddFormOpen}>
-          <AddIcon /> Add Transaction
+          <AddIcon /> Add Category
         </button>
-        <Form
-          method="post"
-          action=''
-        >
+        <Form method="post" action="">
           <input
             type="hidden"
-            name="transactin_ids"
-            value={JSON.stringify(selectedTransactions)}
+            name="category_ids"
+            value={JSON.stringify(selectedCategories)}
           />
           <button
-            disabled={selectedTransactions.length === 0}
+            disabled={selectedCategories.length === 0}
             className={
-              selectedTransactions.length === 0
+              selectedCategories.length === 0
                 ? styles.disabledButton
                 : styles.deleteButton
             }
@@ -97,10 +87,7 @@ function Budget() {
           </button>
         </Form>
       </div>
-      <Form
-        method="post"
-        action=''
-      >
+      <Form method="post" action="">
         <table>
           <thead>
             <tr>
@@ -108,51 +95,41 @@ function Budget() {
                 <input
                   type="checkbox"
                   name="selectAll"
-                  id="selectAll"
                   onChange={handleSelectAll}
                   checked={
-                    selectedTransactions.length ===
-                    transactionsData.transactions.length
+                    selectedCategories.length ===
+                    categoriesData.categories.length
                   }
                 />
               </th>
-              {currentAccount ? null : <th>Account</th>}
-              <th>Date</th>
-              <th>Payee</th>
-              <th>Category</th>
-              <th>Memo</th>
-              <th>Amount</th>
+              <th>Category Name</th>
+              <th>Assigned</th>
+              <th>Activity</th>
+              <th>Available</th>
             </tr>
           </thead>
           <tbody>
-            {isAddTransactionFormOpen && (
-              <TransactionForm
+            {isAddCategoryFormOpen && (
+              <CategoryForm
                 action="create"
-                categories={categories}
-                accounts={accounts}
-                onCancel={() => setIsAddTransactionFormOpen(false)}
-                currentAccount={currentAccount}
+                onCancel={() => setIsAddCategoryFormOpen(false)}
               />
             )}
-            {transactionsData.transactions.map((transaction) =>
-              editingTransaction &&
-              editingTransaction.transaction_id ===
-                transaction.transaction_id ? (
-                <TransactionForm
-                  key={transaction.transaction_id}
+            {categoriesData.categories.map((category) =>
+              editingCategory &&
+              editingCategory.category_id === category.category_id ? (
+                <CategoryForm
+                  key={category.category_id}
                   action="edit"
-                  categories={categories}
-                  accounts={accounts}
-                  onCancel={() => setEditingTransaction(null)}
-                  currentAccount={currentAccount}
-                  transaction={editingTransaction}
+                  onCancel={() => setEditingCategory(null)}
+                  category={editingCategory}
                 />
               ) : (
                 <tr
-                  key={transaction.transaction_id}
-                  onClick={() => handleRowClick(transaction)}
+                  key={category.category_id}
+                  onClick={() => handleRowClick(category)}
                   className={
-                    selectedTransactions.includes(transaction.transaction_id)
+                    selectedCategories.includes(category.category_id)
                       ? styles.selectedRow
                       : ''
                   }
@@ -161,32 +138,19 @@ function Budget() {
                     <input
                       readOnly
                       type="checkbox"
-                      name="select"
-                      id={transaction.transaction_id}
-                      checked={selectedTransactions.includes(
-                        transaction.transaction_id,
+                      checked={selectedCategories.includes(
+                        category.category_id,
                       )}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleSelectTransaction(transaction.transaction_id);
+                        handleSelectCategory(category.category_id);
                       }}
                     />
                   </td>
-                  {currentAccount ? null : (
-                    <td>
-                      {
-                        accounts.find(
-                          (account) =>
-                            account.account_id === transaction.account_id,
-                        ).account_name
-                      }
-                    </td>
-                  )}
-                  <td>{transaction.transaction_date.split('T')[0]}</td>
-                  <td>{transaction.payee}</td>
-                  <td>{transaction.category}</td>
-                  <td>{transaction.memo || '-'}</td>
-                  <td>{transaction.amount} $</td>
+                  <td>{category.category_name}</td>
+                  <td>{category.assigned} $</td>
+                  <td>{category.activity} $</td>
+                  <td>{category.available} $</td>
                 </tr>
               ),
             )}

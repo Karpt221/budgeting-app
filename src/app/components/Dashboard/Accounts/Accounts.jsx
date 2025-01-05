@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';  
+import { useLocation } from 'react-router-dom';
 import styles from './Accounts.module.css';
 import addIcon from '../../../assets/addPlus.svg';
 import AccountsList from './AccountsList';
@@ -9,28 +9,44 @@ import AddAccountModal from './AddAccountModal';
 function Accounts({ user_id, accounts }) {
   const [isEditAccountModalOpen, setIsEditAccountModalOpen] = useState(false);
   const [isAddAccountModalOpen, setIsAddAccountModalOpen] = useState(false);
-  const [editAccount, setEditAccount] = useState({account_id:'', name: '', balance: '' });
-  const location = useLocation();  
-  
-  useEffect(() => {  
-    const params = new URLSearchParams(location.search);  
-    if (params.get('modalClosed') === 'true') {  
-      setIsEditAccountModalOpen(false);  
+  const [editAccount, setEditAccount] = useState({
+    account_id: '',
+    name: '',
+    balance: '',
+  });
+  const [errorMessage, setErrorMessage] = useState(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('modalClosed') === 'true') {
+      setIsEditAccountModalOpen(false);
       setIsAddAccountModalOpen(false);
-    }  
-  }, [location]);  
+      setErrorMessage(null);
+    } else if (params.get('accountError') === 'true') {
+      setErrorMessage(params.get('erorrMessage'));
+    }
+  }, [location]);
 
   return (
     <>
-    <AddAccountModal
+      <AddAccountModal
+        errorMessage={errorMessage}
         user_id={user_id}
         isOpen={isAddAccountModalOpen}
-        onClose={() => setIsAddAccountModalOpen(false)}
+        onClose={() => {
+          setErrorMessage(null);
+          setIsAddAccountModalOpen(false);
+        }}
       />
       <EditAccountModal
+        errorMessage={errorMessage}
         account={editAccount}
         isOpen={isEditAccountModalOpen}
-        onClose={() => setIsEditAccountModalOpen(false)}
+        onClose={() => {
+          setErrorMessage(null);
+          setIsEditAccountModalOpen(false);
+        }}
       />
       {accounts.length !== 0 ? (
         <AccountsList
@@ -43,7 +59,7 @@ function Accounts({ user_id, accounts }) {
       )}
 
       <div className={styles.addAccountNav}>
-        <button onClick={()=>setIsAddAccountModalOpen(true)}>
+        <button onClick={() => setIsAddAccountModalOpen(true)}>
           <img src={addIcon} alt="Add Account" />
           Add Account
         </button>

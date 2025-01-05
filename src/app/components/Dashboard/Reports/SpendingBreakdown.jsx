@@ -47,10 +47,12 @@ function SpendingBreakdown() {
 
     setActionSpendingsBreakdown(await fetchSpendingBreakdown());
   }
-
+  console.log('actionSpendingsBreakdown',actionSpendingsBreakdown);
+  console.log('spendingsBreakdown',spendingsBreakdown);
+  
   const totalSpendings = actionSpendingsBreakdown
-    ? actionSpendingsBreakdown.spendingStats.total_spending
-    : spendingsBreakdown.spendingStats.total_spending;
+    ? actionSpendingsBreakdown?.spendingStats?.total_spending
+    : spendingsBreakdown?.spendingStats?.total_spending;
 
   const { minDate: calculatedMinDate, maxDate: calculatedMaxDate } =
     useMemo(() => {

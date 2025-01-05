@@ -2,7 +2,7 @@ import styles from './AccountModal.module.css';
 import CloseIcon from './CloseIcon';
 import { Form,useLocation } from 'react-router-dom';
 
-const EditAccountModal = ({ account, isOpen, onClose }) => {
+const EditAccountModal = ({errorMessage, account, isOpen, onClose }) => {
   if (!isOpen) return null;
   const location = useLocation();
   
@@ -16,6 +16,7 @@ const EditAccountModal = ({ account, isOpen, onClose }) => {
           </button>
         </div>
         <div className={styles.modalBody}>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
           <p>Account Information</p>
           <Form method="post" action="account">
             <input

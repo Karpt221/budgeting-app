@@ -1,7 +1,7 @@
 import styles from './AccountModal.module.css';
 import CloseIcon from './CloseIcon';
 import { Form, useLocation } from 'react-router-dom';
-const AddAccountModal = ({ user_id, isOpen, onClose }) => {
+const AddAccountModal = ({errorMessage, user_id, isOpen, onClose }) => {
   const location = useLocation();
   if (!isOpen) return null;
 
@@ -15,6 +15,7 @@ const AddAccountModal = ({ user_id, isOpen, onClose }) => {
           </button>
         </div>
         <div className={styles.modalBody}>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
           <p>Account Information</p>
           <Form method="post" action="account">
             <input readOnly type="hidden" name="user_id" value={user_id} />

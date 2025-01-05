@@ -49,7 +49,10 @@ router.post(
     try {
       const filters = req.body;
       console.log('filters:', filters);
-      if ((filters.categories.length === 1 && filters.categories[0] === '') || (filters.accounts.length === 1 && filters.accounts[0] === '')) {
+      if (
+        (filters.categories.length === 1 && filters.categories[0] === '') ||
+        (filters.accounts.length === 1 && filters.accounts[0] === '')
+      ) {
         res.json({
           message: 'Spending trends fetched!',
           spendinTrends: {

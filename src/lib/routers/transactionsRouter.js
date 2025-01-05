@@ -13,7 +13,7 @@ const router = Router({ mergeParams: true });
 
 router.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
+  //passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const { user_id } = req.params;
     console.log('getTransactionsByUserId: ',user_id);
@@ -39,15 +39,15 @@ router.get(
 );
 router.post(
   '/:account_id',
-  passport.authenticate('jwt', { session: false }),
+  //passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { account_id } = req.params;
-      const { transaction_date, payee, category,category_id, memo, amount } = req.body;
-      console.log(transaction_date, payee, category,category_id, memo, amount);
+      const { transaction_date, payee,category_id, memo, amount } = req.body;
+      console.log(transaction_date, payee,category_id, memo, amount);
       console.log(req.body);
       console.log(req.params);
-      if (!transaction_date || !payee || !category || !category_id || !amount) {
+      if (!transaction_date || !payee || !category_id || !amount) {
         return res
           .status(400)
           .json({ code: 400, message: 'Missing required fields' });
@@ -57,7 +57,6 @@ router.post(
         account_id,
         transaction_date,
         payee,
-        category,
         category_id,
         memo,
         amount,
@@ -78,7 +77,6 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
-      // const { transaction_ids } = req.params;
       const { transaction_ids } = req.body;
       console.log(transaction_ids);
       if (!Array.isArray(transaction_ids) || transaction_ids.length === 0) {

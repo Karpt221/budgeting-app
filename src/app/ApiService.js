@@ -118,14 +118,22 @@ class ApiService {
   }
 
   // Categories methods
+  async getReadyToAssign(userId) {
+    return this.fetchData(`/${userId}/categories/ready-to-assign`);
+  }
+
+  async getAllCategories(userId) {
+    return this.fetchData(`/${userId}/categories/all`);
+  }
+
   async getCategories(userId) {
     return this.fetchData(`/${userId}/categories`);
   }
 
-  async createCategory(userId, name) {
-    return this.fetchData(`/${userId}/categories`, {
+  async createCategory(user_id, category_name) {
+    return this.fetchData(`/${user_id}/categories`, {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({user_id, category_name  }),
     });
   }
 
@@ -136,9 +144,10 @@ class ApiService {
     });
   }
 
-  async deleteCategory(categoryId) {
-    return this.fetchData(`/users/categories/${categoryId}`, {
+  async deleteCategories(categoryIds) {
+    return this.fetchData(`/users/categories/`, {
       method: 'DELETE',
+      body: JSON.stringify({ category_ids: categoryIds }),
     });
   }
 

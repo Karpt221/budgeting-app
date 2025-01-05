@@ -155,7 +155,7 @@
 .spendingTrendsContent {
   gap: 20px;
   display: grid;
-  grid-template-rows: 950px 200px;
+  grid-template-rows: 900px 200px;
 }
 
 .stackedBarPlotContainer{

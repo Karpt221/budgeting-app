@@ -88,7 +88,7 @@ const router = createBrowserRouter([
           try {
             const userAccounts = await apiService.getAccounts(params.user_id);
             const user = await apiService.getUserByID(params.user_id);
-            const categoriesResponse = await apiService.getCategories(
+            const categoriesResponse = await apiService.getAllCategories(
               params.user_id,
             );
 
@@ -111,24 +111,49 @@ const router = createBrowserRouter([
             path: 'budget',
             element: <Budget />,
             loader: async ({ params }) => {
+              const readyToAssignResponese = await apiService.getReadyToAssign(
+                params.user_id,
+              );
+              console.log('readyToAssignResponese',readyToAssignResponese);
+              console.log('readyToAssignResponese ready_to_assign',readyToAssignResponese.ready_to_assign);
+              const categoriesResponse = await apiService.getCategories(
+                params.user_id,
+              );
               return {
-                transactions: await loadTransactions(
-                  async () => await apiService.getTransactions(params.user_id),
-                ),
-                account_id: null,
+                categories: categoriesResponse.categories,
+                readyToAssign: readyToAssignResponese.ready_to_assign,
               };
             },
-            action: async ({ request }) => {
-              const formData = await request.formData();
-              const action = formData.get('action');
+            action: async ({ request, params }) => {
               try {
+                const formData = await request.formData();
+                const action = formData.get('action');
                 if (action === 'edit') {
-                  await handleEditTransaction(formData);
+                  await apiService.updateCategory(
+                    formData.get('category_id'),
+                    formData.get('category_name'),
+                    parseInt(formData.get('assigned')),
+                  );
                 } else if (action === 'delete') {
-                  await handleDeleteTransaction(formData);
+                  console.log('category_ids', formData.get('category_ids'));
+                  console.log(
+                    'parsed category_ids',
+                    JSON.parse(formData.get('category_ids')),
+                  );
+                  await apiService.deleteCategories(
+                    JSON.parse(formData.get('category_ids')),
+                  );
                 } else if (action === 'create') {
-                  await handleCreateTransaction(formData);
+                  await apiService.createCategory(
+                    params.user_id,
+                    formData.get('category_name'),
+                  );
                 }
+                const readyToAssignResponese =
+                  await apiService.getReadyToAssign(params.user_id);
+                return {
+                  readyToAssign: readyToAssignResponese.ready_to_assign,
+                };
               } catch (error) {
                 throw new Error(error);
               }
@@ -211,13 +236,12 @@ const router = createBrowserRouter([
                         return account.account_id;
                       },
                     );
-                    const initialData =
-                      await apiService.getSpendingTrends({
-                        startDate: minDate,
-                        endDate: maxDate,
-                        categories: categories_ids,
-                        accounts: accounts_ids,
-                      });
+                    const initialData = await apiService.getSpendingTrends({
+                      startDate: minDate,
+                      endDate: maxDate,
+                      categories: categories_ids,
+                      accounts: accounts_ids,
+                    });
                     return {
                       spendinTrends: initialData.spendinTrends,
                       transactions,
@@ -296,8 +320,8 @@ const router = createBrowserRouter([
             action: async ({ params, request }) => {
               const formData = await request.formData();
               const action = formData.get('action');
+              let redirectLocation = `/${params.user_id}/dashboard/transactions`;
               try {
-                let redirectLocation = `/${params.user_id}/dashboard/transactions`;
                 if (action === 'edit') {
                   await handleEditAccount(formData);
                   redirectLocation = formData.get('previousLocation');
@@ -308,7 +332,14 @@ const router = createBrowserRouter([
                 }
                 return redirect(`${redirectLocation}?modalClosed=true`);
               } catch (error) {
-                throw new Error(error);
+                console.log(error);
+                if (error.code === 409) {
+                  return redirect(
+                    `${formData.get('previousLocation')}?accountError=true&erorrMessage=${error.message}`,
+                  );
+                } else {
+                  throw new Error(error);
+                }
               }
             },
           },

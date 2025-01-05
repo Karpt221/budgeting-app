@@ -24,7 +24,7 @@ router.get(
 
 router.post(
   '/',
-  passport.authenticate('jwt', { session: false }),
+  //passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { name, balance } = req.body;
@@ -34,7 +34,20 @@ router.post(
         account,
       });
     } catch (err) {
-      next(err);
+      if (
+        err.message.includes(
+          'duplicate key value violates unique constraint "unique_user_account_name"',
+        )
+      ) {
+        res
+          .status(409)
+          .json({
+            code: 409,
+            message: 'Account with this name already exist!',
+          });
+      } else {
+        next(err);
+      }
     }
   },
 );
@@ -69,7 +82,18 @@ router.put(
         updatedAccount,
       });
     } catch (err) {
-      next(err);
+      if (
+        err.message.includes(
+          'duplicate key value violates unique constraint "unique_user_account_name"',
+        )
+      ) {
+        res.status(409).json({
+          code: 409,
+          message: 'Account with this name already exist!',
+        });
+      } else {
+        next(err);
+      }
     }
   },
 );

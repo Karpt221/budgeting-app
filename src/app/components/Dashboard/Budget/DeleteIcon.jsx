@@ -1,4 +1,4 @@
-import styles from './Transactions.module.css';
+import styles from './Budget.module.css';
 
 function DeleteIcon() {
   return (
