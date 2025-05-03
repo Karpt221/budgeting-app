@@ -16,8 +16,6 @@ function SpendingTrends() {
   const [actionCategories, setActionCategories] = useState([]);
   const [minDate, setMinDate] = useState(null);
   const [maxDate, setMaxDate] = useState(null);
-  console.log('spendinTrends', spendinTrends);
-  console.log('actionSpendinTrends', actionSpendinTrends);
   async function handleFiltersSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);

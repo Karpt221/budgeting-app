@@ -1,6 +1,13 @@
 CREATE DATABASE budgeting;  
 
--- \c budgeting;  
+
+CREATE TABLE users (
+    user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 
 CREATE TABLE users (
     user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -87,4 +94,4 @@ EXECUTE FUNCTION update_account_balance();
 --         (target_type = 'monthly' AND target_date ~ '^(0?[1-9]|[12][0-9]|3[01]|last day)$') OR
 --         (target_type = 'yearly' AND target_date ~ '^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$')
 --     )
--- );
+-- );ser_id, account_name)

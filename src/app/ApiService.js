@@ -56,7 +56,6 @@ class ApiService {
   }
 
   async getUserByID(user_id) {
-    console.log('getUserByID: ',user_id);
     return this.fetchData(`/${user_id}`);
   }
 
@@ -87,7 +86,6 @@ class ApiService {
 
   // Transactions methods
   async getTransactions(userId) {
-    console.log('getTransactions', userId);
     return this.fetchData(`/${userId}/transactions`);
   }
 
@@ -103,7 +101,6 @@ class ApiService {
   }
 
   async updateTransaction(transactionId, updates) {
-    console.log('updateTransaction:', transactionId);
     return this.fetchData(`/users/transactions/${transactionId}`, {
       method: 'PUT',
       body: JSON.stringify(updates),

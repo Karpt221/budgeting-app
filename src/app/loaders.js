@@ -9,9 +9,7 @@ export const loadTransactions = async (apiCall) => {
 
   try {
     //const user = await apiService.decodeToken(token);
-    console.log(apiCall);
     const responseObj = await apiCall();
-    console.log(responseObj)
     return responseObj.transactions;
   } catch (error) {
     if (error.code === 403) {

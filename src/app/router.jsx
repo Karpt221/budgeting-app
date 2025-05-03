@@ -114,8 +114,6 @@ const router = createBrowserRouter([
               const readyToAssignResponese = await apiService.getReadyToAssign(
                 params.user_id,
               );
-              console.log('readyToAssignResponese',readyToAssignResponese);
-              console.log('readyToAssignResponese ready_to_assign',readyToAssignResponese.ready_to_assign);
               const categoriesResponse = await apiService.getCategories(
                 params.user_id,
               );
@@ -135,11 +133,6 @@ const router = createBrowserRouter([
                     parseInt(formData.get('assigned')),
                   );
                 } else if (action === 'delete') {
-                  console.log('category_ids', formData.get('category_ids'));
-                  console.log(
-                    'parsed category_ids',
-                    JSON.parse(formData.get('category_ids')),
-                  );
                   await apiService.deleteCategories(
                     JSON.parse(formData.get('category_ids')),
                   );

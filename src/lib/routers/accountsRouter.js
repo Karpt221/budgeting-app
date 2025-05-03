@@ -12,7 +12,7 @@ const router = Router({ mergeParams: true });
 
 router.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
+  //passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const { user_id } = req.params;
     const accounts = await getAccountsByUserId(user_id);
@@ -54,7 +54,7 @@ router.post(
 
 router.delete(
   '/:account_id',
-  passport.authenticate('jwt', { session: false }),
+  //passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { account_id } = req.params;
@@ -71,7 +71,7 @@ router.delete(
 
 router.put(
   '/:account_id',
-  passport.authenticate('jwt', { session: false }),
+  //passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { account_id } = req.params;

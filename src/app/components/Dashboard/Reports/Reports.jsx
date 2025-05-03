@@ -11,7 +11,6 @@ function Reports() {
   const location = useLocation();
   const transactions = useLoaderData();
   const { accounts, categories } = useOutletContext();
-  console.log(transactions);
   return (
     <div className={styles.reportsWrapper}>
       <header className={styles.reportsHeader}>

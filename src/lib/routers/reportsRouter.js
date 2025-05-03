@@ -17,7 +17,6 @@ router.post(
       const filters = req.body;
       const spendingsByCategories = await getUserSpendingsByCategory(filters);
       const spendingStats = await getUserSpendingStats(filters);
-
       const transformedSpendings = spendingsByCategories.map((category) => {
         return {
           x: `${category.category_name}\n${category.total_spending} $\n${category.percent}%`,
@@ -48,7 +47,6 @@ router.post(
   async (req, res) => {
     try {
       const filters = req.body;
-      console.log('filters:', filters);
       if (
         (filters.categories.length === 1 && filters.categories[0] === '') ||
         (filters.accounts.length === 1 && filters.accounts[0] === '')

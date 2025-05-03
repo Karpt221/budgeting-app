@@ -1,15 +1,10 @@
 import { Outlet, useLoaderData, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import styles from './Dashboard.module.css';
 import SidebarContextMenu from './SidebarContextMenu/SidebarContextMenu';
 import Accounts from './Accounts/Accounts';
 
 const Dashboard = () => {
   const userData = useLoaderData();
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   return (
     <div className={styles.dashboardContainer}>

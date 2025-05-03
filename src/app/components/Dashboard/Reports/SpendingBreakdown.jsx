@@ -20,7 +20,6 @@ function SpendingBreakdown() {
   const [actionCategories, setActionCategories] = useState([]);
   const [minDate, setMinDate] = useState(null);
   const [maxDate, setMaxDate] = useState(null);
-  console.log(spendingsBreakdown);
   async function handleFiltersSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -47,8 +46,6 @@ function SpendingBreakdown() {
 
     setActionSpendingsBreakdown(await fetchSpendingBreakdown());
   }
-  console.log('actionSpendingsBreakdown',actionSpendingsBreakdown);
-  console.log('spendingsBreakdown',spendingsBreakdown);
   
   const totalSpendings = actionSpendingsBreakdown
     ? actionSpendingsBreakdown?.spendingStats?.total_spending

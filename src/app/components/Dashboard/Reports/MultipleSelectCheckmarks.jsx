@@ -30,8 +30,8 @@ export default function MultipleSelectCheckmarks({
   options,  
   itemName,  
   fieldName,  
-  actionSelectedValues, // New prop for action selected values  
-  onChange, // Prop to handle changes  
+  actionSelectedValues,
+  onChange,
 }) {  
   const [selectedValues, setSelectedValues] = useState([]);  
 

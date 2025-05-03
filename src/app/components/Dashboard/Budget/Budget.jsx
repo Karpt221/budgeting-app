@@ -13,12 +13,9 @@ function Budget() {
   const readyToAssign = categoriesData.readyToAssign;
   const [errorMessage, setErrorMessage] = useState(null);
   const location = useLocation();
-  console.log('categoriesData.readyToAssign', categoriesData.readyToAssign);
-  console.log('errorMessage', errorMessage);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    console.log('params.get(errorMessage)', params.get('errorMessage'));
     if (params.get('categoryError') === 'true') {
       setErrorMessage(params.get('errorMessage'));
     }

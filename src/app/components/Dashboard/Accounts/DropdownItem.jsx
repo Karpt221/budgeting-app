@@ -6,10 +6,7 @@ import { Link } from 'react-router-dom';
 const DropdownItem = ({ setEditAccount, setIsEditAccountModalOpen, account }) => {  
   const [isHovering, setIsHovering] = useState(false);
 
-  const getTransactions = (event) => {  
-    console.log(event.currentTarget.id);  
-  };  
-  // console.log(account);
+
   const showModal = (event) => { 
     event.preventDefault();    
     setIsEditAccountModalOpen(true);
@@ -19,8 +16,7 @@ const DropdownItem = ({ setEditAccount, setIsEditAccountModalOpen, account }) =>
   return (  
     <li> 
       <Link 
-        to={`transactions/${account.account_id}`} 
-        onClick={getTransactions}  
+        to={`transactions/${account.account_id}`}  
         id={account.account_id}  
         className={`${styles.navAccountsBtn} ${styles.account}`}  
         onMouseEnter={() => setIsHovering(true)}  

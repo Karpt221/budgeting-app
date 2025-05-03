@@ -1,265 +1,101 @@
+
+### USERS ###
+GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/ HTTP/1.1
+content-type: application/json
+
+### ACCOUNTS ###
+
+GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/accounts/ HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/accounts/ HTTP/1.1
+content-type: application/json
+
+{
+    "name": "New account",
+    "balance": 999
+}
+###
+PUT http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/accounts/d9564be0-7b73-4d68-983b-845c91cf72a8 HTTP/1.1
+content-type: application/json
+
+{    "name": "Chnaged Name",
+    "balance": 55555
+}
+###
+DELETE http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/accounts/d9564be0-7b73-4d68-983b-845c91cf72a8 HTTP/1.1
+content-type: application/json
+
+### TRANSACTIONS ###
+GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/transactions HTTP/1.1
+content-type: application/json
+###
+GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/transactions/bb6156db-60f0-44cf-9e7f-9dbeb74d1a3a HTTP/1.1
+content-type: application/json
+
+###
+POST http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/transactions/bb6156db-60f0-44cf-9e7f-9dbeb74d1a3a HTTP/1.1
+content-type: application/json
+
+{
+   "transaction_date": "2025-03-25",
+    "payee": "new payee",
+    "category_id": "5f946a79-7aa5-4c4a-9478-7ccca3ffc9a1",
+    "memo": "",
+    "amount": 100
+}
+
+###
+PUT http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/transactions/b0c32286-d391-43b4-b1f4-2a1336c697f9 HTTP/1.1
+content-type: application/json
+
+{
+   "transaction_date": "2025-03-25",
+    "payee": "updated payee",
+    "category_id": "5f946a79-7aa5-4c4a-9478-7ccca3ffc9a1",
+    "memo": "",
+    "amount": 7777
+}
+###
+DELETE http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/transactions/ HTTP/1.1
+content-type: application/json
+
+{
+   "transaction_ids": ["b0c32286-d391-43b4-b1f4-2a1336c697f9"]
+}
+### CATEGORIES ###
+GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/categories/ HTTP/1.1
+content-type: application/json
+###
+GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/categories/all HTTP/1.1
+content-type: application/json
+
+###
 GET http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/categories/ready-to-assign HTTP/1.1
+content-type: application/json
 
-//GET http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/transactions/ HTTP/1.1
-# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/accounts/ HTTP/1.1
-# content-type: application/json
+###
+POST http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/categories/ HTTP/1.1
+content-type: application/json
 
-# {
-#     "name": "hhh",
-#     "balance": "999"
-# }
+{
+    "category_name": "new category"
+}
 
-# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/transactions/508f9be0-7619-41ed-a118-baf19ce46424 HTTP/1.1
-# content-type: application/json
+###
+PUT http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/categories/c0b5b76c-5d7f-4fba-9546-cf904507627c HTTP/1.1
+content-type: application/json
 
-# {
-#     "transaction_date": "2024-12-10",
-#     "payee": "SHOP",
-#     "category_id": "baa63746-790f-43a7-8529-4c39e860b8b5",
-#     "memo": "fsrg",
-#     "amount": "999"
-# }
+{
+    "category_name": "updated category",
+    "assigned": 20
+}
 
+###
+DELETE http://localhost:3001/api/1c0b36fb-3f28-4824-bc12-3a45d75bc1a7/categories/ HTTP/1.1
+content-type: application/json
 
-# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/reports/spending-trends HTTP/1.1  
-# content-Type: application/json  
-
-# {
-#     "startDate": "2024-11",
-#     "endDate": "2025-02",
-#     "categories": [
-#         "980bb4f6-4277-4b86-8124-0931118172dc",
-#         "036c754a-712e-4d79-9ab0-355e2ea9ce55",
-#         "612b1b35-2bab-4e2e-a18f-41a8cc0fc634",
-#         "9f51801c-fe54-4fd3-9f66-b9d34a6935da"
-#     ],
-#     "accounts": [
-#         "dcd70c3e-4546-4714-9e96-0ecf601e227b",
-#         "7842d695-65d8-4777-844b-4c8d7a15fcd1"
-#     ]
-# }
-
-
-# {
-#   "message": "Spending trends fetched!",
-#   "spendinTrends": {
-#     "spendingsBreakdownByMonth": [
-#       {
-#         "month": "2024-11",
-#         "categories": [
-#           {
-#             "name": "Rent",
-#             "amount": "866",
-#             "percent": "100",
-#             "color": "#30b004"
-#           }
-#         ]
-#       },
-#       {
-#         "month": "2025-01",
-#         "categories": [
-#           {
-#             "name": "Groceries",
-#             "amount": "922",
-#             "percent": "42",
-#             "color": "#11ae75"
-#           },
-#           {
-#             "name": "Rent",
-#             "amount": "646",
-#             "percent": "30",
-#             "color": "#30b004"
-#           },
-#           {
-#             "name": "Medical Treatment",
-#             "amount": "577",
-#             "percent": "26",
-#             "color": "#512c78"
-#           }
-#         ]
-#       },
-#       {
-#         "month": "2025-02",
-#         "categories": [
-#           {
-#             "name": "Medical Treatment",
-#             "amount": "575",
-#             "percent": "100",
-#             "color": "#512c78"
-#           }
-#         ]
-#       }
-#     ],
-#     "totalSpending": "3586",
-#     "averageMonthlySpending": 1195
-#   }
-# }
-
-# "spendingsBreakdown": {
-#     "spendingsByCategories": [
-#       {
-#         "x": "Category 2\n87878 $\n99%",
-#         "y": "99",
-#         "color": "#681c1b",
-#         "category_name": "Category 2",
-#         "amount": "87878",
-#         "percent": "99"
-#       },
-#       {
-#         "x": "Category 1\n500 $\n1%",
-#         "y": "1",
-#         "color": "#2137d0",
-#         "category_name": "Category 1",
-#         "amount": "500",
-#         "percent": "1"
-#       },
-#       {
-#         "x": "Category 3\n474 $\n1%",
-#         "y": "1",
-#         "color": "#c5f606",
-#         "category_name": "Category 3",
-#         "amount": "474",
-#         "percent": "1"
-#       }
-#     ],
-#     "spendingStats": {
-#       "avg_monthly_spending": "29617.33",
-#       "avg_daily_spending": "29617.00",
-#       "most_frequent_category_name": "Category 3",
-#       "most_frequent_category_transactions": "1",
-#       "largest_outflow_category": "Category 2",
-#       "largest_outflow_amount": 87878
-#     }
-#   }
-
-# POST http://localhost:3001/api/4bc5a1d7-16ed-4ed8-9a2e-6b4b8332e38c/accounts/ HTTP/1.1
-# content-type: application/json
-
-# {
-#     "name": "New acc",
-#     "balance": "999"
-# }
-
-# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups HTTP/1.1
-
-# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups HTTP/1.1  
-# Content-Type: application/json  
-
-# {  
-#     "name": "Health & Fitness"  
-# }
-
-# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/37d24069-bb4f-430b-9fc0-5f4e06af77a6 HTTP/1.1  
-# Content-Type: application/json  
-
-# {  
-#     "name": "Updated Group Name"  
-# }
-
-
-# DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9 HTTP/1.1
-
-#GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories HTTP/1.1
-
-# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9/categories HTTP/1.1  
-# Content-Type: application/json  
-
-# {  
-#     "name": "Groceries"
-# }
-
-# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9/categories/d05b49c1-c8f1-4f75-a3b8-b677f83cd426 HTTP/1.1  
-# Content-Type: application/json  
-
-# {  
-#     "name": "Updated Category Name",  
-#     "assigned": 60000  
-# }
-
-# DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/bcb543c7-213e-48d4-8878-e41bd4b810d9/categories/d0a55fc5-6732-49f3-940c-23b0a5c53fc3 HTTP/1.1
-
-# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1
-
-# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1  
-# Content-Type: application/json  
-
-# {  
-#     "targetType": "monthly",  
-#     "need": 40000,  
-#     "targetDate": "15",  
-#     "nextGoal": "refill up to"  
-# }
-
-#DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1
-
-# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/category-groups/a62fede7-17ed-4aff-8de9-d9476f794053/categories/ee6348ec-6815-4350-8d36-6f40b28c427d/target HTTP/1.1  
-# Content-Type: application/json  
-
-# {  
-#     "targetType": "monthly",  
-#     "need": 30000,  
-#     "targetDate": "last day",  
-#     "nextGoal": "set aside another"  
-# }
-######################################################################################################################
-
-
-# POST http://localhost:3001/api/auth/sign-in HTTP/1.1
-# content-type: application/json
-
-# {
-#     "email": "user2@mail.com",
-#     "password": "1234"
-# }
-
-# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/ HTTP/1.1
-
-# DELETE http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/d2468217-ac0a-4487-8a11-5de6644c275e HTTP/1.1
-
-# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/3e488504-31fd-466a-85f5-33cdbf8fea3e HTTP/1.1
-# content-type: application/json
-
-# {
-#     "name": "Changed Name",
-#     "balance": "55555"
-# }
-
-# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/accounts/ HTTP/1.1
-# content-type: application/json
-
-# {
-#     "name": "New acc",
-#     "balance": "999"
-# }
-
-
-# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/3e488504-31fd-466a-85f5-33cdbf8fea3e HTTP/1.1
-
-# GET http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/ HTTP/1.1
-
-# POST http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/3e488504-31fd-466a-85f5-33cdbf8fea3e HTTP/1.1
-# content-type: application/json
-
-# {
-#     "date": "2010-12-20",
-#     "payee": "SHOP",
-#     "category": "SHOP",
-#     "memo": "fsrg",
-#     "amount": "999",
-#     "cleared": "true"
-# }
-
-# PUT http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/b379526d-c8f5-4463-8296-1301a0ba2c0e HTTP/1.1
-# content-type: application/json
-
-# {
-#     "date": "2025-12-20",
-#     "payee": "PJKK",
-#     "category": "PJKK",
-#     "memo": "fsrg",
-#     "amount": "55533",
-#     "cleared": "true"
-# }
-
-
-# DELETE  http://localhost:3001/api/15230c93-4c13-4a71-baa1-77f11408684d/transactions/b379526d-c8f5-4463-8296-1301a0ba2c0e HTTP/1.1
+{
+    "category_ids": ["c0b5b76c-5d7f-4fba-9546-cf904507627c"]
+}

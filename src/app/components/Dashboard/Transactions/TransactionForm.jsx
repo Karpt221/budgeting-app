@@ -1,6 +1,5 @@
 import styles from './Transactions.module.css';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 const TransactionForm = ({
   action,
@@ -10,8 +9,6 @@ const TransactionForm = ({
   transaction,
   categories,
 }) => {
-  console.log(categories);
-
   return (
     <>
       <tr className={styles.addRow}>

@@ -32,7 +32,7 @@ categoriesRouter.get(
 
 categoriesRouter.get(
   '/ready-to-assign',
-  //passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { user_id } = req.params;
@@ -71,7 +71,8 @@ categoriesRouter.post(
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
-      const { user_id, category_name } = req.body;
+      const { category_name } = req.body;
+      const { user_id } = req.params;
       const newCategory = await createCategory(user_id, category_name);
       res.status(201).json({
         message: 'Category created successfully',
@@ -100,8 +101,8 @@ categoriesRouter.put(
   async (req, res, next) => {
     try {
       const { category_id } = req.params;
-      const { name, assigned } = req.body;
-      const updatedCategory = await updateCategory(category_id, name, assigned);
+      const { category_name, assigned } = req.body;
+      const updatedCategory = await updateCategory(category_id, category_name, assigned);
       res.json({
         message: 'Category updated successfully',
         category: updatedCategory,
@@ -123,23 +124,6 @@ categoriesRouter.put(
   },
 );
 
-// categoriesRouter.put(
-//   '/:category_id',
-//   passport.authenticate('jwt', { session: false }),
-//   async (req, res, next) => {
-//     try {
-//       const { category_id } = req.params;
-//       const { name, assigned } = req.body;
-//       const updatedCategory = await updateCategory(category_id, name, assigned);
-//       res.json({
-//         message: 'Category updated successfully',
-//         category: updatedCategory,
-//       });
-//     } catch (err) {
-//       next(err);
-//     }
-//   },
-// );
 
 categoriesRouter.delete(
   '/',
@@ -165,7 +149,7 @@ categoriesRouter.delete(
   },
 );
 
-// Use targetsRouter for nested routes
+
 categoriesRouter.use('/:category_id/target', targetsRouter);
 
 export default categoriesRouter;
