@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { createUser, findUserByEmail } from '../db/userQueries.js';
 
-const router = Router();
+const router = Router({ mergeParams: true });
 const JWT_SECRET = 'secret';
 
 router.post('/sign-up', async (req, res, next) => {
