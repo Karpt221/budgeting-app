@@ -3,12 +3,12 @@ import apiService from './ApiService.js';
 export async function handleEditAccount(formData) {
   const accountId = formData.get('account_id');
   const name = formData.get('name');
-  await apiService.updateAccount(accountId, name);
+  return await apiService.updateAccount(accountId, name);
 }
 
 export async function handleDeleteAccount(formData) {
   const accountId = formData.get('account_id');
-  await apiService.deleteAccount(accountId);
+  return await apiService.deleteAccount(accountId);
 }
 
 export async function handleCreateAccount(formData) {
@@ -38,12 +38,12 @@ export async function handleEditTransaction(formData, account_id = null) {
     memo: formData.get('memo'),
     amount: formData.get('amount'),
   };
-  await apiService.updateTransaction(transactionId, updates);
+  return await apiService.updateTransaction(transactionId, updates);
 }
 
 export async function handleDeleteTransaction(formData) {
   const transactin_ids = JSON.parse(formData.get('transactin_ids'));
-  await apiService.deleteTransactions(transactin_ids);
+  return await apiService.deleteTransactions(transactin_ids);
 }
 
 export async function handleCreateTransaction(formData, account_id = null) {
@@ -64,5 +64,5 @@ export async function handleCreateTransaction(formData, account_id = null) {
     amount: formData.get('amount'),
   };
 
-  await apiService.createTransaction(finalAccount_id, transactionData);
+  return await apiService.createTransaction(finalAccount_id, transactionData);
 }
