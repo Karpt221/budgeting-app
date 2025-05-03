@@ -1,11 +1,11 @@
-class CustomError extends Error {  
-  constructor(message, options = {}) {  
-      super(message);  
-      this.name = this.constructor.name;  
-      this.code = options.code || null; 
-      Error.captureStackTrace(this, this.constructor);  
-  }  
-}  
+class CustomError extends Error {
+  constructor(message, options = {}) {
+    super(message);
+    this.name = this.constructor.name;
+    this.code = options.code || null;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
 
 class ApiService {
   constructor(baseURL) {
@@ -22,16 +22,33 @@ class ApiService {
           Authorization: `Bearer ${localStorage.getItem('budgeting-user-token')}`,
         },
       });
+      const contentType = response.headers.get('content-type');
+      console.log('Response status:', response.status);
+      console.log('Content type:', contentType);
 
       if (!response.ok) {
+        if (!contentType || !contentType.includes('application/json')) {
+          const textError = await response.text();
+          console.error('Non-JSON error:', textError);
+          throw new Error(
+            `API request failed: ${textError.substring(0, 100)}...`,
+          );
+        }
         const errorData = await response.json();
-        throw new CustomError(errorData.message || 'API request failed', {code: errorData.code});
+        throw new CustomError(errorData.message || 'API request failed', {
+          code: errorData.code,
+        });
+      }
+      const responseText = await response.text();
+      if (!responseText.trim()) {
+        console.error('Empty response received');
+        throw new Error('Server returned empty response');
       }
 
       return await response.json();
     } catch (error) {
       console.error('API call error:', error);
-      throw error; 
+      throw error;
     }
   }
 
@@ -130,7 +147,7 @@ class ApiService {
   async createCategory(user_id, category_name) {
     return this.fetchData(`/${user_id}/categories`, {
       method: 'POST',
-      body: JSON.stringify({user_id, category_name  }),
+      body: JSON.stringify({ user_id, category_name }),
     });
   }
 
