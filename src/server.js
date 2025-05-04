@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import mainRouter from './lib/routers/mainRouter.js';
 
-const PORT = process.env.PORT || 8080;
+const PORT = 8080;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = join(__filename, '..');
@@ -33,5 +33,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT,'::', () => {
-  console.log(`Server is running on http://${process.env.HOSTNAME}:${PORT}`);
+  console.log(`Server is running on ${PORT}`);
 });
