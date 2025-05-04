@@ -8,6 +8,13 @@ import reportsRouter from './reportsRouter.js';
 
 const router = Router();
 
+router.get('/test', (req, res, next) => {
+  try {
+    return res.status(200).json("Hello Worls!");
+  } catch (error) {
+    next(error);
+  }
+});
 router.use('/auth', authRouter);
 router.use('/:user_id/', userRouter); 
 router.use('/:user_id/reports', reportsRouter); 
