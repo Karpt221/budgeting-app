@@ -12,6 +12,11 @@ const __dirname = join(__filename, '..');
 
 const app = express();
 
+app.use((req, res, next) => {
+  console.log('Request received:', req.method, req.originalUrl, 'Base URL:', req.baseUrl);
+  next();
+});
+
 app.use(express.json());
 
 app.use('/api', mainRouter);
@@ -27,6 +32,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({error:err , message: 'Internal server error' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT,'::', () => {
   console.log(`Server is running on http://${process.env.HOSTNAME}:${PORT}`);
 });
