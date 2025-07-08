@@ -9,7 +9,6 @@ const DropdownItem = ({ setEditAccount, setIsEditAccountModalOpen, account }) =>
   const getTransactions = (event) => {  
     console.log(event.currentTarget.id);  
   };  
-  // console.log(account);
   const showModal = (event) => { 
     event.preventDefault();    
     setIsEditAccountModalOpen(true);

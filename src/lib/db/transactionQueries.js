@@ -45,7 +45,6 @@ export const createTransaction = async (transactionData) => {
     const { account_id, transaction_date, payee, category_id, memo, amount } =
       transactionData;
 
-    // Insert the transaction
     const query = `
       INSERT INTO transactions (account_id, transaction_date, payee, category_id, memo, amount)
       VALUES ($1, $2, $3, $4, $5, $6)
@@ -61,7 +60,6 @@ export const createTransaction = async (transactionData) => {
     ];
     const { rows } = await pool.query(query, values);
 
-    // Fetch category_name for the category_id
     const { rows: categoryRows } = await pool.query(
       `
       SELECT category_name
@@ -78,7 +76,6 @@ export const createTransaction = async (transactionData) => {
     const categoryName = categoryRows[0].category_name;
 
     if (categoryName === 'Ready to Assign') {
-      // Fetch user_id associated with the account
       const { rows: userRows } = await pool.query(
         `
         SELECT user_id
@@ -113,7 +110,6 @@ export const updateTransactionById = async (transaction_id, updates) => {
     const { account_id, transaction_date, payee, category_id, memo, amount } =
       updates;
 
-    // Retrieve the old transaction details
     const { rows: oldTransactionRows } = await pool.query(
       `
       SELECT amount, category_id
@@ -133,7 +129,6 @@ export const updateTransactionById = async (transaction_id, updates) => {
     const oldAmount = oldTransaction.amount;
     const oldCategoryId = oldTransaction.category_id;
 
-    // Update the transaction
     const query = `
       UPDATE transactions
       SET
@@ -163,7 +158,6 @@ export const updateTransactionById = async (transaction_id, updates) => {
 
     const updatedTransaction = rows[0];
 
-    // Retrieve category_name for the new category_id
     const { rows: categoryRows } = await pool.query(
       `
       SELECT category_name
@@ -179,7 +173,6 @@ export const updateTransactionById = async (transaction_id, updates) => {
 
     const categoryName = categoryRows[0].category_name;
 
-    // Handle 'Ready to Assign' category
     if (categoryName === 'Ready to Assign' && oldAmount !== amount) {
       const { rows: userRows } = await pool.query(
         `
@@ -197,10 +190,8 @@ export const updateTransactionById = async (transaction_id, updates) => {
       const userId = userRows[0].user_id;
       await updateReadyToAssign(userId);
     } else if (oldAmount !== amount) {
-      // Update activity for the updated category if the amount has changed
       await updateActivityForCategories([updatedTransaction.category_id]);
       await updateAvailableForCategories([updatedTransaction.category_id]);
-      // If the category_id has changed, update activity for the old category
       if (updatedTransaction.category_id !== oldCategoryId) {
         await updateActivityForCategories([oldCategoryId]);
         await updateAvailableForCategories([oldCategoryId]);
@@ -216,7 +207,6 @@ export const updateTransactionById = async (transaction_id, updates) => {
 
 export const deleteTransactionsByIds = async (transaction_ids) => {
   try {
-    // Fetch category_ids and user_id for the provided transactions
     const { rows: transactionDetails } = await pool.query(
       `
       SELECT t.category_id, c.category_name, c.user_id
@@ -231,7 +221,6 @@ export const deleteTransactionsByIds = async (transaction_ids) => {
       throw new Error(`No transactions found for the provided IDs`);
     }
 
-    // Identify categories that are not 'Ready to Assign'
     const nonReadyToAssignCategoryIds = [
       ...new Set(
         transactionDetails
@@ -240,14 +229,12 @@ export const deleteTransactionsByIds = async (transaction_ids) => {
       ),
     ];
 
-    // Identify if there are any 'Ready to Assign' transactions
     const readyToAssignTransactions = transactionDetails.filter(
       ({ category_name }) => category_name === 'Ready to Assign'
     );
     const hasReadyToAssign = readyToAssignTransactions.length > 0;
     const userId = readyToAssignTransactions[0]?.user_id;
 
-    // Delete the transactions
     const deleteQuery = `
       DELETE FROM transactions
       WHERE transaction_id = ANY($1::uuid[])
@@ -259,13 +246,11 @@ export const deleteTransactionsByIds = async (transaction_ids) => {
       throw new Error(`No transactions found for the provided IDs`);
     }
 
-    // Update activity for categories that are not 'Ready to Assign'
     if (nonReadyToAssignCategoryIds.length > 0) {
       await updateActivityForCategories(nonReadyToAssignCategoryIds);
       await updateAvailableForCategories(nonReadyToAssignCategoryIds);
     }
 
-    // Update 'Ready to Assign' for the user if applicable
     if (hasReadyToAssign && userId) {
       await updateReadyToAssign(userId);
     }

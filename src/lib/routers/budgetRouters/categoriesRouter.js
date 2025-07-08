@@ -32,7 +32,7 @@ categoriesRouter.get(
 
 categoriesRouter.get(
   '/ready-to-assign',
-  //passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { user_id } = req.params;
@@ -123,23 +123,6 @@ categoriesRouter.put(
   },
 );
 
-// categoriesRouter.put(
-//   '/:category_id',
-//   passport.authenticate('jwt', { session: false }),
-//   async (req, res, next) => {
-//     try {
-//       const { category_id } = req.params;
-//       const { name, assigned } = req.body;
-//       const updatedCategory = await updateCategory(category_id, name, assigned);
-//       res.json({
-//         message: 'Category updated successfully',
-//         category: updatedCategory,
-//       });
-//     } catch (err) {
-//       next(err);
-//     }
-//   },
-// );
 
 categoriesRouter.delete(
   '/',
@@ -165,7 +148,6 @@ categoriesRouter.delete(
   },
 );
 
-// Use targetsRouter for nested routes
 categoriesRouter.use('/:category_id/target', targetsRouter);
 
 export default categoriesRouter;

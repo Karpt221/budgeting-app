@@ -13,7 +13,6 @@ function StackedBarPlot({ data }) {
 
   const hasSingleBar = data.filter(monthData => monthData.categories.length > 0).length === 1;  
 
-  // Check if data is empty  
   const isEmptyData = data.length === 0;  
 
   return (  
@@ -27,10 +26,10 @@ function StackedBarPlot({ data }) {
       />  
       <VictoryAxis  
         style={{  
-          tickLabels: { fontSize: 10 }, // Set the font size for the y-axis labels  
+          tickLabels: { fontSize: 10 }, 
         }}  
         dependentAxis  
-        tickFormat={(y) => (isEmptyData ? '' : `${y} $`)} // Hide y-axis labels if no data  
+        tickFormat={(y) => (isEmptyData ? '' : `${y} $`)}
       />  
       {isEmptyData ? (  
         // Render "No Data" message  
@@ -70,7 +69,6 @@ function StackedBarPlot({ data }) {
                       : 0,  
                 },  
               }}  
-              // Set the width of the bar explicitly  
               barWidth={100} // Adjust this value as needed  
             />  
           ));  

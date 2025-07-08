@@ -69,7 +69,6 @@ export const createBankingAccount = async (user_id, name, balance = 0) => {
 
 export const deleteBankingAccountById = async (account_id) => {
   try {
-    // Retrieve user_id for the account
     const { rows: userRows } = await pool.query(
       `
       SELECT user_id
@@ -85,7 +84,6 @@ export const deleteBankingAccountById = async (account_id) => {
 
     const userId = userRows[0].user_id;
 
-    // Retrieve distinct category_ids for transactions associated with the account
     const { rows: categoryRows } = await pool.query(
       `
       SELECT DISTINCT category_id
@@ -97,7 +95,6 @@ export const deleteBankingAccountById = async (account_id) => {
 
     const categoryIds = categoryRows.map((row) => row.category_id);
 
-    // Delete the account
     const { rows } = await pool.query(
       `
       DELETE FROM accounts  
@@ -111,13 +108,11 @@ export const deleteBankingAccountById = async (account_id) => {
       throw new Error(`Account with ID ${account_id} not found`);
     }
 
-    // Update activity for the selected categories if any category_ids exist
     if (categoryIds.length > 0) {
       await updateActivityForCategories(categoryIds);
       await updateAvailableForCategories(categoryIds);
     }
 
-    // Update Ready to Assign for the user
     await updateReadyToAssign(userId);
 
     return rows[0];

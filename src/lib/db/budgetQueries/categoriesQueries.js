@@ -125,7 +125,6 @@ export const deleteCategories = async (categoryIds) => {
     }
 
     await updateReadyToAssign(userId);
-    //await updateAvailableForCategories(categoryIds);
 
     return rows;
   } catch (error) {
@@ -157,7 +156,6 @@ export const updateReadyToAssign = async (userId) => {
   try {
     await pool.query('BEGIN');
 
-    // Query to calculate the total amount of transactions in "Ready to Assign" category
     const { rows: readyToAssignTransactions } = await pool.query(
       `
       SELECT COALESCE(SUM(t.amount), 0) AS total_ready_to_assign
@@ -171,7 +169,6 @@ export const updateReadyToAssign = async (userId) => {
     const totalReadyToAssign =
       readyToAssignTransactions[0].total_ready_to_assign;
 
-    // Query to calculate the total "assigned" value of all other categories for the user
     const { rows: otherCategoriesAssigned } = await pool.query(
       `
       SELECT COALESCE(SUM(assigned), 0) AS total_assigned
@@ -213,7 +210,6 @@ export const updateActivityForCategories = async (categoryIds) => {
     await pool.query('BEGIN');
 
     for (const categoryId of categoryIds) {
-      // Calculate the sum of 'amount' for transactions in the current category
       const { rows: activityRows } = await pool.query(
         `
         SELECT COALESCE(SUM(amount), 0) AS activity
@@ -251,7 +247,6 @@ export const updateAvailableForCategories = async (categoryIds) => {
       throw new Error('Invalid input: categoryIds must be a non-empty array.');
     }
     await pool.query('BEGIN');
-    // Prepare the query to update the available field
     const query = `
       UPDATE categories
       SET available = assigned + activity
@@ -259,7 +254,6 @@ export const updateAvailableForCategories = async (categoryIds) => {
       RETURNING category_id, available;
     `;
 
-    // Execute the query with the provided category IDs
     const { rows } = await pool.query(query, [categoryIds]);
 
     if (rows.length === 0) {

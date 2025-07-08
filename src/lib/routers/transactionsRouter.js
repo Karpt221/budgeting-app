@@ -13,7 +13,7 @@ const router = Router({ mergeParams: true });
 
 router.get(
   '/',
-  //passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const { user_id } = req.params;
     console.log('getTransactionsByUserId: ',user_id);
@@ -39,7 +39,7 @@ router.get(
 );
 router.post(
   '/:account_id',
-  //passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { account_id } = req.params;
