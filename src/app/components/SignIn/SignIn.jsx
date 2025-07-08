@@ -47,7 +47,7 @@ export const EyeSlashIcon = () => (
   </svg>
 );
 
-function SignIn({ messageProp, errorProp }) {
+function SignIn() {
   const actionData = useActionData();
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
 
@@ -57,6 +57,7 @@ function SignIn({ messageProp, errorProp }) {
 
   return (
     <div className={styles.formContainer}>
+      <Link className={styles.linkColor} to="/main">Back to Main</Link>
       <h1>Sign In</h1>
       {actionData?.error && <p style={{ color: 'red' }}>{actionData.error}</p>}
       {actionData?.state && (
@@ -88,10 +89,13 @@ function SignIn({ messageProp, errorProp }) {
             </button>
           </div>
         </div>
-        <button className={styles.submitBtn} type="submit">Log In</button>
+        <button className={styles.submitBtn} type="submit">
+          Log In
+        </button>
       </Form>
       <p>
-        Don't have an account? <Link to="/sign-up">Sign Up</Link>
+        <span>Don&apos;t have an account? </span>
+        <Link to="/sign-up">Sign Up</Link>
       </p>
     </div>
   );

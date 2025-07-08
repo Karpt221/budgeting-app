@@ -3,6 +3,7 @@ import apiService from './ApiService.js';
 import App from './App';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
+import MainPage from './components/MainPage/MainPage';
 import Dashboard from './components/Dashboard/Dashboard';
 import Budget from './components/Dashboard/Budget/Budget';
 import Reports from './components/Dashboard/Reports/Reports';
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
           try {
             const token = localStorage.getItem('budgeting-user-token');
             if (!token) {
-              return redirect('/sign-in');
+              return redirect('/main');
             } else {
               const user = await apiService.decodeToken(token);
               return redirect(`${user.user_id}/dashboard/transactions`);
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
             }
           }
         },
+      },
+      {
+        path: '/main',
+        element: <MainPage />,
       },
       {
         path: '/sign-in',

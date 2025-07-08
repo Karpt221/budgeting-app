@@ -13,6 +13,7 @@ function SignUp() {
   }
   return (
     <div className={styles.formContainer}>
+      <Link className={styles.linkColor} to="/main">Back to Main</Link>
       <h1>Sign Up</h1>
       {actionData?.error && <p style={{ color: 'red' }}>{actionData.error}</p>}
       <Form method="post">
